@@ -1,0 +1,448 @@
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" id="top-nav-bottom">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                  <a class="navbar-brand" href="/" id="logo"></a>
+            </div>
+            <!-- Top Menu Items -->
+            <ul class="nav navbar-right top-nav">
+                
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Natalie Menahem <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                    <li>
+                        <a href="/"><i class="fa fa-fw fa-home"></i> Home Page</a>
+                    </li>
+                    <li>
+                        <a href="javascript:" data-toggle="collapse" data-target="#ExpCollapse"><i class="fa fa-fw fa-briefcase"></i> Experiments <i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="ExpCollapse" class="collapse.in">
+                            <li>
+                                <a href="/NewExperiment" class="subMenuActive">Create a New</a>
+                            </li>
+                            <li>
+                                <a href="/Experiments">View Existing</a>
+                            </li>
+                        </ul>
+                    </li>
+                     <li>
+                        <a href="javascript:" data-toggle="collapse" data-target="#CatCollapse"><i class="fa fa-fw fa-tasks"></i> Categories <i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="CatCollapse" class="collapse">
+                            <li>
+                                <a href="/NewCategory">Create a New</a>
+                            </li>
+                            <li>
+                                <a href="/Categories">View Existing</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="contact.html"><i class="fa fa-fw fa-send"></i> Contact</a>
+                    </li>
+                     <li>
+                        <a href="about.html"><i class="fa fa-fw fa-info"></i> About</a>
+                    </li>
+                     <li>
+                        <a href="http://www.surveygizmo.com" target="_blank"><i class="fa fa-fw fa-link"></i> SurveyGizmo</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                  <ol class="breadcrumb BreadCrumbsStyle">
+                            <li>
+                                <i class="fa fa-home"></i>  <a href="/">Home Page</a>
+                            </li>
+                            &nbsp<i class="fa fa-play active"> </i>&nbsp
+                            <li class="active">
+                                <i class="fa fa-briefcase"></i> New Experiment
+                            </li>
+                   </ol>
+                
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header groovyBorder">
+                            Create a New <small>Experiment</small>
+                        </h1>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+				<form action="/SubmitExperiment" method="post" role="form">
+	                 
+	                 <section id="newExperiment">
+	                 	
+	                 	<article id="generalTab" class="btn btn-default tabStyle" onclick="generalPressed()"> General </article>
+	                 	<article id="ParticipantsTab" class="btn btn-default tabStyle" onclick="participantsPressed()"> Exam UI</article>
+	                 	<article id="InterationTab" class="btn btn-default tabStyle" style="color: #AAA;"> Interation </article>
+	                 	
+	                 		<section id="generalSection">
+							                 	<section class="expFormLeftSide">
+										                 <div class="form-group">
+								                                <label>Experiment's Name </label>
+								                                  <input type="text" class="form-control formStyle" name="name" required>
+										                 </div>
+										                 
+										                 <div class="form-group">
+								                                <label>Experiment's Description </label>
+								                                <textarea class="form-control textStyle formStyle" name="description" rows="10"></textarea>
+								                                
+							                            </div>
+							                            
+							                            <section class="priceLeftSide">
+										                            <div class="form-group">
+											                                <label>Maximum Tries </label>
+											                                  <input type="number" min="0" class="form-control formStyle" name="points" required>
+													                 </div>
+													    </section>
+													      
+													    <section class="priceRightSide">           
+													                   <div class="form-group">
+											                                <label>Wallet's Size </label>
+											                                  <input type="number" min="0" class="form-control formStyle" name="wallet" required>
+													                 </div>
+							                            </section>
+							                            
+							                            <div class="clear"></div>
+						                        </section>
+						                            
+						                        <section class="expFormRightSide">
+						                       
+						                        	<div class="form-group">
+								                                <label>Gizmo Source Code (Javascript) </label>
+								                                  <input type="text" class="form-control formStyle" name="survaypage" required>
+										            </div>
+										            
+										            <div class="form-group">
+						                                <label>Associate with a Category </label>
+						                                <select class="form-control formStyle" name="Categories">
+						                                    {{#each items}}
+                                                                   <option value="{{category_id}}">{{category_name}}</option>
+                                                            {{/each}} 
+						                                </select>
+						                            </div>     
+						                            
+						                            <label>Payment Algorithem </label>
+						                            <section class="switchesLeftSide">		
+						                                <section class="switchFather">
+								                            	 <div class="form-group">				
+																	<label>Show Prices </label><br>
+																		<section class="onoffswitch">
+																			    <input type="checkbox" name="PriceOnOffSwitch" class="onoffswitch-checkbox" id="PriceOnOffSwitch" checked="checked" onclick="showPrices()">
+																			    <label class="onoffswitch-label" for="PriceOnOffSwitch">
+																			        <span class="onoffswitch-inner"></span>
+																			        <span class="onoffswitch-switch"></span>
+																			    </label>
+																		</section>
+																	</div>
+														</section>	
+														
+														<section id="leftSonActivate">  <i class="fa fa-arrow-down"  id="arrDownPosition"></i>	 </section>	
+														
+														<section id="rightSonActivate"> <i class="fa fa-arrow-right" id="arrRightPosition"></i>	 </section>
+														 
+														 <section class="switchesSons">
+														 	<section class="switchLeftSon">
+																 <div class="form-group">		
+																	<label>Negotiation</label><br>
+																		<section class="onoffswitch">
+																		    <input type="checkbox" name="BidOnOffSwitch" class="onoffswitch-checkbox" id="BidOnOffSwitch" onclick="negotiation()">
+																		    <label class="onoffswitch-label" for="BidOnOffSwitch">
+																		        <span class="onoffswitch-inner"></span>
+																		        <span class="onoffswitch-switch"></span>
+																		    </label>
+																		</section>
+																	</div>
+															</section>
+															
+															<section class="switchRightSon">	
+																 <div class="form-group">			
+																	<label>Minimum Price</label><br>
+																	<section class="onoffswitch">
+																		    <input type="checkbox" name="MinPriceOnOffSwitch" class="onoffswitch-checkbox" id="MinPriceOnOffSwitch"  onclick="minimumPrice()">
+																		    <label class="onoffswitch-label" for="MinPriceOnOffSwitch">
+																		        <span class="onoffswitch-inner"></span>
+																		        <span class="onoffswitch-switch"></span>
+																		    </label>
+																	</section>	
+																</div>
+															</section>
+															
+														</section>
+														
+													</section>	
+													
+													<section class="switchesRightSide">
+															<div class="form-group">			
+																	<label>&nbsp &nbsp&nbsp Private</label> <br>
+															       <section class="onoffswitch">
+																		    <input type="checkbox" name="PrivateOnOffSwitch" class="onoffswitch-checkbox" id="PrivateOnOffSwitch" onclick="privateSwitch()">
+																		    <label class="onoffswitch-label" for="PrivateOnOffSwitch">
+																		        <span class="onoffswitch-inner"></span>
+																		        <span class="onoffswitch-switch"></span>
+																		    </label>
+																	</section>
+															</div>			
+								                   </section>
+						                   
+						                 </section>
+						                 
+						                 <section class="buttonsSection">
+						                 	<input type="submit" class="btn btn-default submitStyle" onclick="participantsPressed()" value="Submit">
+						                  	 <a href="/Experiments"><article class="btn btn-default cancelStyle">Cancel</article> </a>
+						                 </section>
+						            
+						                 
+		 		 			</section>
+		 		 			
+			                 <section id="participantsSection">
+			                 	   
+			                
+										  <section class="topParticipants">          
+										                 
+										                 <div class="form-group">
+								                                <label>Introduction </label>
+								                                <article>
+								                                		<textarea class="editor form-control" name="intro" rows="10"></textarea>
+								                               </article> 
+							                            </div>
+							                            
+							                             <div class="form-group">
+								                                <label>Conclusions </label>
+								                                <textarea class="editor form-control" name="summary" rows="10"></textarea>
+								                                
+							                            </div>
+							                            
+							               </section>                
+							         	   <section class="expFormLeftSide">            
+							         	   	        
+							                            <div class="form-group">
+								                                <label>Message for "Show Prices" = "ON" </label>
+								                                  <input type="text" class="form-control formStyle">
+										                 </div>
+							                            
+							                             <div class="form-group">
+								                                <label>Message for "Negotiation" = "ON" </label>
+								                                  <input type="text" class="form-control formStyle">
+										                 </div>
+										                 
+										                  <div class="form-group">
+								                                <label>Message for "Minimum Price" = "ON" </label>
+								                                  <input type="text" class="form-control formStyle">
+										                 </div> 
+										                 
+										                  <div class="form-group">
+								                                <label>Message for "Minimum Price" = "OFF" </label>
+								                                  <input type="text" class="form-control formStyle">
+										                 </div> 
+										                 
+										                 <div class="form-group">
+								                                <label>Message Seen Above the Products  </label>
+								                                  <input type="text" class="form-control formStyle">
+										                 </div> 
+										                 
+										                  <div class="form-group">
+								                                <label>Message for Entering a Price that is Too Low </label>
+								                                  <input type="text" class="form-control formStyle">
+										                 </div>
+							                            
+							                             <div class="form-group">
+								                                <label>Header for Rating Page</label>
+								                                  <input type="text" class="form-control formStyle">
+										                 </div>
+										                 
+										                  <div class="form-group">
+								                                <label>Minor Heading for Rating Page</label>
+								                                  <input type="text" class="form-control formStyle">
+										                 </div> 
+										                 
+						                    </section>
+						                            
+						                    <section class="expFormRightSide">
+						                               
+				                               <label id="labelRating">Rating (1 is the Lowest - 10 is the Highest)</label>							                 		
+									                    <table id="ratingTable" class="rating-list">
+															    <thead class="tableHeader">
+															        <tr>
+															        	<td class="tableNumbersHeaderLeft">#</td>
+															            <td class="tableHeaderRight">Rate Message</td>
+															        </tr>
+															    </thead>
+															    <tbody id="ratingTableBody">
+															        <!-- <tr>
+															            <td>
+															                <input type="text" name="name"  class="tableStyle" />
+															            </td>
+															            <td>
+															                <input type="text" name="price1"  class="tableStyle" />
+															            </td>
+															            <td><a class="deleteRow"></a>
+															
+															            </td>
+															        </tr> -->
+															    </tbody>
+															    <tfoot>
+															        <tr>
+															            <td colspan="2" style="text-align: left;">
+															                <input type="button" id="addRatingRow" value="Add Row" class="addNew"/>
+															            </td>
+															        </tr>
+															    </tfoot>
+														</table>
+									      </section>
+									      
+						           <section class="buttonsSection">
+					              	    <input type="submit" class="btn btn-default submitStyle" value="Submit">
+					              	    <!-- <article class="btn btn-default nextStyle" onclick="generalPressed()">Back</article>    -->
+					              	    <a href="/Experiments"><article class="btn btn-default cancelStyle">Cancel</article> </a>   
+					              </section>
+					              
+					         </section> 
+			                 
+			                  <section id="iterationSection">
+			                  	
+			                  	<section id="iterationTable">
+			                  		
+			                  		<div class="col-lg-6 ">
+				                        <label>Iterations Table</label>
+				                        <div class="table-responsive iterationBorderRadius">
+				                            <table class="table table-bordered table-hover table-striped">
+				                                <thead class="iterationTableHeader">
+				                                    <tr>
+				                                        <th>Date</th>
+				                                        <th>Subjects</th>
+				                                        <th>Comments</th>
+				                                        <th>Link</th>
+				                                        <th>Export</th>
+				                                        <th>Edit</th>
+				                                    </tr>
+				                                </thead>
+				                                <tbody class="iterationTableStyle">
+				                                    <tr class="iterationFirstTr">
+				                                        <td>/index.html</td>
+				                                        <td>1265</td>
+				                                        <td>32.3%</td>
+				                                        <td>$321.33</td>
+				                                        <td>32.3%</td>
+				                                        <td>$321.33</td>
+				                                    </tr>
+				                                    <tr>
+				                                        <td>/about.html</td>
+				                                        <td>261</td>
+				                                        <td>33.3%</td>
+				                                        <td>$234.12</td>
+				                                        <td>32.3%</td>
+				                                        <td>$321.33</td>
+				                                    </tr>
+				                                    <tr>
+				                                        <td>/index.html</td>
+				                                        <td>1265</td>
+				                                        <td>32.3%</td>
+				                                        <td>$321.33</td>
+				                                        <td>32.3%</td>
+				                                        <td>$321.33</td>
+				                                    </tr>
+				                                    <tr>
+				                                        <td>/about.html</td>
+				                                        <td>261</td>
+				                                        <td>33.3%</td>
+				                                        <td>$234.12</td>
+				                                        <td>32.3%</td>
+				                                        <td>$321.33</td>
+				                                    </tr>
+				                                    <tfoot>
+				                                    	<td colspan="6" class="iterationTableFooter"></td>
+				                                    </tfoot>
+				                                 </tbody>
+				                            </table>
+				                        </div>
+				                    </div>
+			                  		
+			                  		
+			                  	</section>
+			                  	
+			                  	
+			                  
+			                  	<!-- <label id="labelUsers">Users Table</label><br><br>
+			                 		<section id="tablePlace">
+					                    <table id="myTable" class="order-list">
+											    <thead class="tableHeader">
+											        <tr>
+											            <td class="tableHeaderLeft">Name</td>
+											            <td class="tableHeaderRight">Price</td>
+											        </tr>
+											    </thead>
+											    <tbody id="tableBody">
+											        <tr>
+											            <td>
+											                <input type="text" name="name"  class="tableStyle" />
+											            </td>
+											            <td>
+											                <input type="text" name="price1"  class="tableStyle" />
+											            </td>
+											            <td><a class="deleteRow"></a>
+											
+											            </td>
+											        </tr>
+											    </tbody>
+											    <tfoot>
+											        <tr>
+											            <td colspan="2" style="text-align: left;">
+											                <input type="button" id="addrow" value="Add Row" class="addNew"/>
+											            </td>
+											        </tr>
+											    </tfoot>
+										</table>
+					                 	<section id="tableDisabler"> </section> 
+					             	 </section>   -->
+			                  	
+			                  </section>
+			                 
+			                 
+				                    
+	                 </section>
+
+                </form>
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
