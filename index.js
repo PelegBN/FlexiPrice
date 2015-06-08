@@ -34,7 +34,7 @@ var app = express();
 app.use('/css',express.static(path.join(__dirname, 'css')));
 app.use('/js',express.static(path.join(__dirname, 'js')));
 app.use('/font-awesome',express.static(path.join(__dirname, 'font-awesome')));
-app.use('/images',express.static(path.join(__dirname, 'images')));
+app.use('/Images',express.static(path.join(__dirname, 'Images')));
 app.use('/jQuery-TE_v.1.4.0',express.static(path.join(__dirname, 'jQuery-TE_v.1.4.0')));
 app.use(express.static(__dirname + 'views/public'));
 
