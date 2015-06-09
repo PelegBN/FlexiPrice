@@ -51,7 +51,7 @@
           
         </section>
         <section id="loginArea"> 
-          <input class="btn btn-default submitStyle" type="submit" value="Submit" onclick="submitAll()">
+          <input class="btn btn-default submitStyle" type="submit" value="Submit" onclick="submitAll()" id="submitBTN">
         </section>
       
 
@@ -623,7 +623,7 @@ function getParameterByName(name) {
         }
 
         function rating() {
-          tipWallet = sessionStorage.getItem("wallet");
+          //tipWallet = sessionStorage.getItem("wallet");
           console.log("I'm rating!");
           document.getElementById("gizmoContainer").style.display = "none";
           document.getElementById("formArea").style.display = "none";
@@ -649,7 +649,7 @@ function getParameterByName(name) {
                       if(k==0) td.innerText = "Product for Question #" + quesNum; 
                       if (name == "") name = "You didn't choose any item in this question"
                       if (k==1 ) td.innerHTML = name;
-                      if (k == 2) td.innerHTML = "<input class='numStyle' type='number' id='tip" +quesNum+prodNum+ "' name='tip' min='0' step='1' value='0' onchange='checkValidTip(this.value)'>";
+                      if (k == 2) td.innerHTML = "<input class='numStyle' type='number' id='tip" +quesNum+prodNum+ "' name='tip' min='0' step='1' value='0' onchange='checkValidTip()'>";
                       if (k==3) {
                          td.innerHTML = "<select class='inpStyle' name='rating' id='rate"+quesNum + prodNum+"' > <option value='Very Helpfull' selected>Very Helpfull</option> <option value='Helpfull'>Helpfull</option> <option value='So so'>So so</option> <option value='Did not helped at all'>Did not helped at all</option> <option value='BAD!'>BAD!</option> </select>";
                       }
@@ -667,24 +667,33 @@ function getParameterByName(name) {
 
 
 //onchange='checkValidTip(this.value)'
-        function checkValidTip(tip){
+        function checkValidTip(){
+          var totalTip = 0;
+          var tipWallet = sessionStorage.getItem("wallet");
+
+          for(var i=1;i<=JSON.parse(sessionStorage.getItem("questionNumber"));i++){
+            var questionTemp = JSON.parse(sessionStorage.getItem("question"+i));
+            var products = questionTemp["products"];
+            for(var j=0; j<products.length; j++){
+              var num = j+1;
+              var tip = document.getElementById("tip"+i+num).value;
+              totalTip += JSON.parse(tip);
+            }
+          }
+          //totalTip -= tip;
+
           console.log('Tip: ' + tip);
-          if((tipWallet - tip) < 0)
+          if((tipWallet - totalTip) < 0)
           {
             alert("You don't have enough money to tip this high");
             document.getElementById('submitBTN').disabled = true;
           }
           else {
             document.getElementById('submitBTN').disabled = false;
-            tipWallet -= tip
+            //tipWallet -= tip;
           }
 
         }
-
-
-                
-
-
 </script>
 
 

@@ -967,7 +967,7 @@ app.get('/Excel', isLoggedIn, function(req, res){
                       product_name = itemsList[i].product_name;
                       //answer = (itemsList[i].answer).substring(1, (itemsList[i].answer).length-1);
                       rating = itemsList[i].rating;
-                      SessionID = itemsList[i].SessionID
+                      SessionID = itemsList[i].sessionID
 
                       a=[iteration_id,userId, SessionID, name, grade, balance, question_title, product_name, min_price, paid_price, revealed_price, rating];
                       

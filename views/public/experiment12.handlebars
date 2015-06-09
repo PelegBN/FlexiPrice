@@ -91,7 +91,7 @@
           
         </section>
         <section id="loginArea"> 
-          <input class="btn btn-default submitStyle" type="submit" value="Submit" onclick="submitAll()">
+          <input class="btn btn-default submitStyle" type="submit" value="Submit" onclick="submitAll()" id="submitBTN">
         </section>
       
 
@@ -104,12 +104,21 @@
 var lastScore;
 var questionNum;
 var question = {
-  user_id:"",
-  products:[],
-  title:"",
-  answer:"",
-  numOfProducts:0
+user_id:"",
+products:[],
+title:"",
+answer:"",
+numOfProducts:0
 };
+
+var sessionID;
+
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 
         window.onload = function() {
           
@@ -137,6 +146,20 @@ var question = {
                 if (sessionStorage.getItem("questionNumber") === null) {
                     sessionStorage.setItem("questionNumber", 0);
                 }
+
+
+                var tempSessionID = getParameterByName('sg_sessionid');
+                if(tempSessionID !== "") {
+                  //console.log("Session:" + tempSessionID);
+                  if (sessionStorage.getItem("sessionID") === null) {
+                    sessionStorage.setItem("sessionID", tempSessionID);
+                    //console.log(sessionStorage.getItem("sessionID"));
+                    sessionID = sessionStorage.getItem("sessionID");
+                  }
+                }
+                
+
+
 
             } else {
                 document.getElementById("wallet").innerHTML = "Sorry, your browser does not support Web Storage...";
@@ -238,13 +261,17 @@ var question = {
               sessionStorage.setItem("questionNumber", JSON.parse(sessionStorage.getItem("questionNumber"))+1);
             }
 
-            if (questionNum == null)
+            if (questionNum == "")
             {
-              lastScore = sessionStorage.getItem("score");
+               console.log("Last Question");
+              var score = document.getElementsByClassName("sg-question-options")[0].innerText;
+              document.getElementsByClassName("sg-question-options")[0].style.visibility = "hidden";
+              lastScore = score;
               document.getElementById("continueBTN").style.display = "block";
             }
 
             //if (lastScore == null) lastScore = 0;
+
             sessionStorage.setItem("score", lastScore);
             document.getElementById("score").innerHTML = sessionStorage.getItem("score");
 
@@ -272,7 +299,7 @@ var question = {
                 var temp = {
                   product_id: {{product_id}},
                   name: "{{name}}",
-                  min_price: (Math.random() * ({{value}} - {{min_price}}) + {{min_price}}).toFixed(3),
+                  min_price: (Math.random() * ({{value}} - {{min_price}}) + {{min_price}}).toFixed(2),
                   revealed_price:"",
                   rating:"",
                   subjective_price:[],
@@ -344,7 +371,7 @@ var question = {
                     {
                       //Updating Wallet and setting product to be avilable
                       window.open(path, '_blank');
-                      sessionStorage.setItem("wallet", (sessionStorage.getItem("wallet") - value).toFixed(3));
+                      sessionStorage.setItem("wallet", (sessionStorage.getItem("wallet") - value).toFixed(2));
                       document.getElementById("wallet").innerHTML = sessionStorage.getItem("wallet");
                       console.log(sessionStorage.getItem("wallet"));
 
@@ -419,7 +446,7 @@ var question = {
               {
                 //Updating wallet and setting product to be avilabe
                 window.open(path, '_blank');
-                sessionStorage.setItem("wallet", (sessionStorage.getItem("wallet") - price).toFixed(3));
+                sessionStorage.setItem("wallet", (sessionStorage.getItem("wallet") - price).toFixed(2));
                 document.getElementById("wallet").innerHTML = sessionStorage.getItem("wallet");
                 console.log(sessionStorage.getItem("wallet"));
 
@@ -464,7 +491,7 @@ var question = {
                     {
                       //Updating wallet and setting product to be avilabe
                       window.open(path, '_blank');
-                      sessionStorage.setItem("wallet", (sessionStorage.getItem("wallet") - value).toFixed(3));
+                      sessionStorage.setItem("wallet", (sessionStorage.getItem("wallet") - value).toFixed(2));
                       document.getElementById("wallet").innerHTML = sessionStorage.getItem("wallet");
                       console.log(sessionStorage.getItem("wallet"));
 
@@ -530,7 +557,7 @@ var question = {
                     {
                       //Updating wallet and setting product to be avilabe
                       window.open(path, '_blank');
-                      sessionStorage.setItem("wallet", (sessionStorage.getItem("wallet") - price).toFixed(3));
+                      sessionStorage.setItem("wallet", (sessionStorage.getItem("wallet") - price).toFixed(2));
                       document.getElementById("wallet").innerHTML = sessionStorage.getItem("wallet");
                       console.log(sessionStorage.getItem("wallet"));
 
@@ -576,17 +603,20 @@ var question = {
 
         function submitAll(){
           console.log("Submitting");
-
+          var totalTip = 0;
           //Getting Tip and rating
           for(var i=1;i<=JSON.parse(sessionStorage.getItem("questionNumber"));i++){
 
             var questionTemp = JSON.parse(sessionStorage.getItem("question"+i));
             var products = questionTemp["products"];
             
+            
             for(var j=0; j<products.length; j++){
 
               var num = j+1;
               var tip = document.getElementById("tip"+i+num).value;
+              totalTip += JSON.parse(tip);
+
               var rate = document.getElementById("rate"+i+num).value;
               products[j]["revealed_price"] = tip;
               products[j]["rating"] = rate;
@@ -601,13 +631,14 @@ var question = {
             questionsArray.push(JSON.parse(sessionStorage.getItem("question"+i)));
           }
 
-          
+          console.log("Total tip = "+totalTip);
           var data = {};
           data.iteration = sessionStorage.getItem("iteration");
+          data.sessionID = sessionStorage.getItem("sessionID");
           data.name = sessionStorage.getItem("name");
           data.numOfquestions = sessionStorage.getItem("questionNumber");
           data.grade = sessionStorage.getItem("score");
-          data.balance = sessionStorage.getItem("wallet");
+          data.balance = sessionStorage.getItem("wallet") - totalTip;
           data.question_array = questionsArray;
 
           var request = $.ajax({
@@ -632,6 +663,7 @@ var question = {
         }
 
         function rating() {
+          //tipWallet = sessionStorage.getItem("wallet");
           console.log("I'm rating!");
           document.getElementById("gizmoContainer").style.display = "none";
           document.getElementById("formArea").style.display = "none";
@@ -657,7 +689,7 @@ var question = {
                       if(k==0) td.innerText = "Product for Question #" + quesNum; 
                       if (name == "") name = "You didn't choose any item in this question"
                       if (k==1 ) td.innerHTML = name;
-                      if (k == 2) td.innerHTML = "<input class='numStyle' type='number' id='tip" +quesNum+prodNum+ "' name='tip' min='0' step='1' value='0'>";
+                      if (k == 2) td.innerHTML = "<input class='numStyle' type='number' id='tip" +quesNum+prodNum+ "' name='tip' min='0' step='1' value='0' onchange='checkValidTip()'>";
                       if (k==3) {
                          td.innerHTML = "<select class='inpStyle' name='rating' id='rate"+quesNum + prodNum+"' > <option value='Very Helpfull' selected>Very Helpfull</option> <option value='Helpfull'>Helpfull</option> <option value='So so'>So so</option> <option value='Did not helped at all'>Did not helped at all</option> <option value='BAD!'>BAD!</option> </select>";
                       }
@@ -674,7 +706,35 @@ var question = {
         }
 
 
-                
+//onchange='checkValidTip(this.value)'
+        function checkValidTip(){
+          var totalTip = 0;
+          var tipWallet = sessionStorage.getItem("wallet");
 
+          for(var i=1;i<=JSON.parse(sessionStorage.getItem("questionNumber"));i++){
+            var questionTemp = JSON.parse(sessionStorage.getItem("question"+i));
+            var products = questionTemp["products"];
+            for(var j=0; j<products.length; j++){
+              var num = j+1;
+              var tip = document.getElementById("tip"+i+num).value;
+              totalTip += JSON.parse(tip);
+            }
+          }
+          //totalTip -= tip;
 
+          console.log('Tip: ' + tip);
+          if((tipWallet - totalTip) < 0)
+          {
+            alert("You don't have enough money to tip this high");
+            document.getElementById('submitBTN').disabled = true;
+          }
+          else {
+            document.getElementById('submitBTN').disabled = false;
+            //tipWallet -= tip;
+          }
+
+        }
 </script>
+
+
+
