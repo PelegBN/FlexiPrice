@@ -22,6 +22,7 @@
                         <li>
                             <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
                         </li>
+                        
                         <li class="divider"></li>
                         <li>
                             <a href="/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
@@ -35,7 +36,7 @@
                     <li>
                         <a href="/"><i class="fa fa-fw fa-home"></i> Home Page</a>
                     </li>
-                    <li>
+                     <li>
                         <a href="javascript:" data-toggle="collapse" data-target="#ExpCollapse"><i class="fa fa-fw fa-briefcase"></i> Experiments <i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="ExpCollapse" class="collapse">
                             <li>
@@ -48,20 +49,20 @@
                     </li>
                      <li>
                         <a href="javascript:" data-toggle="collapse" data-target="#CatCollapse"><i class="fa fa-fw fa-tasks"></i> Categories <i class="fa fa-fw fa-caret-down"></i></a>
-                        <ul id="CatCollapse" class="collapse.in">
+                        <ul id="CatCollapse" class="collapse">
                             <li>
-                                <a href="/NewCategory" class="subMenuActive">Create a New</a>
+                                <a href="/NewCategory">Create a New</a>
                             </li>
                             <li>
                                 <a href="/Categories">View Existing</a>
                             </li>
                         </ul>
                     </li>
-                    <li>
+                    <li class="active">
                         <a href="/contact"><i class="fa fa-fw fa-send"></i> Contact</a>
                     </li>
                      <li>
-                        <a href="Help.pdf" target="_blank"><i class="fa fa-fw fa-info"></i> Help</a>
+                        <a href="about.html"><i class="fa fa-fw fa-info"></i> About</a>
                     </li>
                      <li>
                         <a href="http://www.surveygizmo.com" target="_blank"><i class="fa fa-fw fa-link"></i> SurveyGizmo</a>
@@ -78,49 +79,58 @@
                 <!-- Page Heading -->
                   <ol class="breadcrumb BreadCrumbsStyle">
                             <li>
-                                <i class="fa fa-home"></i>  <a href="/">Home Page</a>
+                                <i class="fa fa-home"></i>  <a href="../index.html"> Home Page </a>
                             </li>
                             &nbsp<i class="fa fa-play active"> </i>&nbsp
                             <li class="active">
-                                <i class="fa fa-tasks"></i> New Category
+                                 <i class="fa fa-send"></i> Contact
                             </li>
                    </ol>
                 
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header groovyBorder">
-                           Create a New <small>Category</small>
+                            Contact <small>us</small>
                         </h1>
                     </div>
                 </div>
                 <!-- /.row -->
+                <section class="expFormLeftSide">
+                    <br>  
+                        <label> "FleXiprice" was created by Natalie Menahem and Peleg Bar Natan as a final/graduation project
+                        in "Software Engineering" at Senkar Collage.<br><br>
+                        We will do our best in maintaining, updating, fixing and adding features to the system.
+                        Any requests, remarks or feedbacks are more then welcome.</label>
+                </section>
 
-				 <form action="/SubmitCategory" method="post" role="form">
-	                 
-	                 <section id="newCatStepOne">
-	                 	
-			                 <div class="form-group">
-	                                <label>Category's Name: </label>
-	                                  <input type="text" class="form-control formStyle" name="name" required>
-			                 </div>
-			                 
-			                 <div class="form-group">
-	                                <label>Category's Description: </label>
-	                                <textarea class="form-control textStyle formStyle" name="message" rows="10"></textarea>
-	                                
-                            </div>
-                              
-                              <section class="buttonsSection">
-						                  	 <input class="btn btn-default nextStyle" value="Next" type="submit" onclick="newCatAlert()">
-						                  	 <a href="/Categories"><article class="btn btn-default cancelStyle">Cancel</article> </a>
-						     </section>
-                              
-                              
-			                 
-	                 </section>
+                <section class="expFormRightSide">
+                     <form action="/contact" method="post" role="form">
+                         
+                         <section id="newCatStepOne">
+                            
+                                 <div class="form-group">
+                                        <label>Name </label>
+                                          <input type="text" class="form-control formStyle" name="name">
+                                 </div>
 
-                </form>
+                                 <div class="form-group">
+                                        <label>Email </label>
+                                          <input type="email" class="form-control formStyle" name="email" required>
+                                 </div>
+                                 
+                                 <div class="form-group">
+                                        <label>Message: </label>
+                                        <textarea class="form-control textStyle formStyle" name="message" rows="10"></textarea>
+                                        
+                                </div>
+                                  
+                                  <section class="buttonsSection">
+                                        <input class="btn btn-default submitStyle" value="Submit" type="submit">
+                                 </section>
+                          </section>
 
+                    </form>
+                </section>
             </div>
             <!-- /.container-fluid -->
 
@@ -129,3 +139,4 @@
 
     </div>
     <!-- /#wrapper -->
+

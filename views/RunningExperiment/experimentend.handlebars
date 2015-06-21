@@ -4,7 +4,7 @@
       <section id="formArea"> 
        
           <section id="objContainer">
-              <label>Please Choose a Product </label><br>
+              <label>{{details.1.aboveProducts}}</label><br>
           </section>  
         
       </section>
@@ -13,8 +13,8 @@
       </section>
 
       <section id="ratingArea">
-        <h3>Please rate the product you used in this experiment</h3>
-        <h4>In the "tip" box, please enter the amount you wish to add on top of what you already paid </h4>
+        <h3>{{details.1.ratingHeader}}</h3>
+        <h4>{{details.1.ratingSubHeader}}</h4>
         <table id="keywords1" cellspacing="0" cellpadding="0">
                 <thead class="TableHeader">
                   <tr>
@@ -24,28 +24,6 @@
                     <th><span>Rating</span></th>
                   </tr>
                 </thead>
-<!--                 <tbody>
-                  {{#each details}}
-                    <tr>
-                      <td class="lalign">
-                        <a role="button" class="cbp-vm-icon cbp-vm-add" target="_blank" href="{{path}}">{{name}}</a>
-                      </td>
-
-                      <td>
-                        <input class="numStyle" type="number" name="tip" min="0" step="1" value="0">
-                      </td>
-                      <td>
-                        <select class="inpStyle" name="rating">
-                          <option value="Very Helpfull" selected>Very Helpfull</option>
-                          <option value="Helpfull">Helpfull</option>
-                          <option value="So so">So so</option>
-                          <option value="Didn't helped at all">Didn't helped at all</option>
-                          <option value="BAD!">BAD!</option>
-                        </select>
-                      </td> 
-                    </tr>
-                  {{/each}}
-                </tbody> -->
         </table>
         <section id="rateTable">
           
@@ -64,11 +42,11 @@
 var lastScore;
 var questionNum;
 var question = {
-user_id:"",
-products:[],
-title:"",
-answer:"",
-numOfProducts:0
+  user_id:"",
+  products:[],
+  title:"",
+  answer:"",
+  numOfProducts:0
 };
 
 var sessionID;
@@ -244,6 +222,7 @@ function getParameterByName(name) {
           document.getElementsByClassName("btn-default")[0].className = "";
           document.getElementById("continueBTN").className = "btn btn-default submitStyle";
           document.getElementsByClassName("sg-survey")[0].style.borderRadius = "15px";
+          
           showProducts();
         };
 
@@ -273,9 +252,13 @@ function getParameterByName(name) {
             var sessionProduct = JSON.parse(sessionStorage.getItem("product"+{{product_id}}));
 
             var tempPrice = sessionProduct["min_price"];
+            var tempActive = sessionProduct["avilable"];
 
             var product = document.createElement('article');
-            product.className = "product";
+
+            if(tempActive == false) product.className = "product";
+            else product.className = 'productBought';
+
             product.setAttribute("id", "product"+{{product_id}});
             var link = document.createElement('h5');
 
@@ -312,13 +295,11 @@ function getParameterByName(name) {
 
           //console.log(temp);
           if(temp["avilable"] === true)
-          {
-            console.log("You already bought the item");
+          {            
             window.open(path, '_blank');
             question["products"].push(temp);
             question["numOfProducts"]++;
             sessionStorage.setItem("question"+questionNum, JSON.stringify(question));
-            console.log(sessionStorage.getItem("question"+questionNum));
             return;
           }
 
@@ -326,7 +307,7 @@ function getParameterByName(name) {
           {
             case "on":
             {
-                 if (confirm("Do you want to make a purchase?") == true) {
+                 if (confirm("{{details.1.showPricesON}}") == true) {
                     if((sessionStorage.getItem("wallet") - value) > 0)
                     {
                       //Updating Wallet and setting product to be avilable
@@ -344,6 +325,8 @@ function getParameterByName(name) {
                       question["products"].push(temp);
                       sessionStorage.setItem("question"+questionNum, JSON.stringify(question));
                       console.log(sessionStorage.getItem("question"+questionNum));
+
+                      document.getElementById('product'+productId).className = 'productBought';
                     }
                     else {
                       alert("Sorry, but you don't have enough money");
@@ -397,7 +380,7 @@ function getParameterByName(name) {
         function openNegPop(productId, path, productName, value) {  
         console.log("openNegPop");         
           console.log("4");
-          var price = prompt("Enter a price");
+          var price = prompt("{{details.1.openNegotiation}}");
           if (price == "") openNegPop(productId, path, productName);
 
           else{
@@ -422,6 +405,8 @@ function getParameterByName(name) {
                 question["products"].push(temp);
                 question["numOfProducts"]++;
                 sessionStorage.setItem("question"+questionNum, JSON.stringify(question));
+
+                document.getElementById('product'+productId).className = 'productBought';
               }
                 else {
                       alert("Sorry, but you don't have enough money");
@@ -441,7 +426,7 @@ function getParameterByName(name) {
 
           while (count > 0 && done==false)
           {
-            var price = prompt("Enter a price");
+            var price = prompt("{{details.1.minPriceON}}");
             if (price == "") {done = true;}
 
             else{
@@ -468,6 +453,8 @@ function getParameterByName(name) {
                       question["products"].push(tempProduct);
                       sessionStorage.setItem("question"+questionNum, JSON.stringify(question));
                       done = true;
+
+                      document.getElementById('product'+productId).className = 'productBought';
                     }
                       else {
                       alert("Sorry, but you don't have enough money");
@@ -475,7 +462,7 @@ function getParameterByName(name) {
                   }
                   else {
                     count--;
-                    alert("Your price is too low");
+                    alert("{{details.1.priceTooLow}}");
                     
                     tempProduct = JSON.parse(sessionStorage.getItem("product"+productId));
                     tempProduct["subjective_price"].push(price);
@@ -500,7 +487,7 @@ function getParameterByName(name) {
 
         //Open negotiation off + use min price off
         function useMinPriceOff(productId, path, value, productName){
-          console.log("useMinPriceOff");
+          console.log("{{details.1.minPriceOFF}}");
                     var count = {{details.1.max_tries}};
           var done = false;
           var tempProduct;
@@ -534,6 +521,8 @@ function getParameterByName(name) {
                       question["products"].push(tempProduct);
                       sessionStorage.setItem("question"+questionNum, JSON.stringify(question));
                       done = true;
+
+                      document.getElementById('product'+productId).className = 'productBought';
                     }
                       else {
                       alert("Sorry, but you don't have enough money");
@@ -541,7 +530,7 @@ function getParameterByName(name) {
                   }
                   else {
                     count--;
-                    alert("Your price is too low");
+                    alert("{{details.1.priceTooLow}}");
                     
                     tempProduct = JSON.parse(sessionStorage.getItem("product"+productId));
                     tempProduct["subjective_price"].push(price);
@@ -623,7 +612,7 @@ function getParameterByName(name) {
         }
 
         function rating() {
-          //tipWallet = sessionStorage.getItem("wallet");
+          tipWallet = sessionStorage.getItem("wallet");
           console.log("I'm rating!");
           document.getElementById("gizmoContainer").style.display = "none";
           document.getElementById("formArea").style.display = "none";
@@ -649,9 +638,21 @@ function getParameterByName(name) {
                       if(k==0) td.innerText = "Product for Question #" + quesNum; 
                       if (name == "") name = "You didn't choose any item in this question"
                       if (k==1 ) td.innerHTML = name;
-                      if (k == 2) td.innerHTML = "<input class='numStyle' type='number' id='tip" +quesNum+prodNum+ "' name='tip' min='0' step='1' value='0' onchange='checkValidTip()'>";
+                      if (k == 2) td.innerHTML = "<input class='numStyle' type='number' id='tip" +quesNum+prodNum+ "' name='tip' min='0' step='1' value='0' onchange='checkValidTip(this.value)'>";
                       if (k==3) {
-                         td.innerHTML = "<select class='inpStyle' name='rating' id='rate"+quesNum + prodNum+"' > <option value='Very Helpfull' selected>Very Helpfull</option> <option value='Helpfull'>Helpfull</option> <option value='So so'>So so</option> <option value='Did not helped at all'>Did not helped at all</option> <option value='BAD!'>BAD!</option> </select>";
+                         td.innerHTML = "<select class='inpStyle rateSelect' name='rating' id='rate"+quesNum + prodNum+"'> <option value='Very Helpfull' selected>Very Helpfull</option> <option value='Helpfull'>Helpfull</option> <option value='So so'>So so</option> <option value='Did not helped at all'>Did not helped at all</option> <option value='BAD!'>BAD!</option> </select>";
+                         // 
+                         // {
+                         //  td.innerHTML+= "<option value='{{details.1.rate1}}' selected>{{details.1.rate1}}</option>"
+                         // }
+                         //console.log({{details.1.numOfRates}});
+                        // for (var n=1 ;n<={{details.1.numOfRates}} ; n++)
+                        // {
+                        //   console.log('{{details.1.rate1}}');
+                        //   $('.rateSelect').append($("<option></option>").val('{{details.1.rate1}}').html("{{details.1.rate1}}"));
+                        //  //$('select[id^=rate]').append("<option value='{{details.1.rate1}}'>{{details.1.rate1}}</option>");
+                        // }
+                         
                       }
                      
                       tr.appendChild(td)
@@ -667,34 +668,24 @@ function getParameterByName(name) {
 
 
 //onchange='checkValidTip(this.value)'
-        function checkValidTip(){
-          var totalTip = 0;
-          var tipWallet = sessionStorage.getItem("wallet");
-
-          for(var i=1;i<=JSON.parse(sessionStorage.getItem("questionNumber"));i++){
-            var questionTemp = JSON.parse(sessionStorage.getItem("question"+i));
-            var products = questionTemp["products"];
-            for(var j=0; j<products.length; j++){
-              var num = j+1;
-              var tip = document.getElementById("tip"+i+num).value;
-              totalTip += JSON.parse(tip);
-            }
-          }
-          //totalTip -= tip;
-
+        function checkValidTip(tip){
           console.log('Tip: ' + tip);
-          if((tipWallet - totalTip) < 0)
+          if((tipWallet - tip) < 0)
           {
             alert("You don't have enough money to tip this high");
             document.getElementById('submitBTN').disabled = true;
           }
           else {
             document.getElementById('submitBTN').disabled = false;
-            //tipWallet -= tip;
+            tipWallet -= tip
           }
 
         }
-</script>
 
+
+                
+
+
+</script>
 
 

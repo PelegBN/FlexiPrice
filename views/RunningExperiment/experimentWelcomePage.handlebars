@@ -15,7 +15,50 @@
    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/runningExperimentStyle.css">
 
+<script type="text/javascript">
 
+  window.onload = function() { 
+    var myString = "{{intro}}";
+    myString = $("<div />").html(myString).text();
+    $("#introArea").append(myString);
+
+    if("{{private}}" == "on")
+    {
+      console.log("Iteration is private");
+      document.getElementById('theWall').style.display = 'block';
+      document.getElementById('introArea').style.display = 'none';
+      document.getElementById('loginArea').style.display = 'none';
+    }
+
+    if("{{private}}" == "off")
+    {
+      console.log("Iteration is public");
+       document.getElementById('theWall').style.display = 'none';
+      document.getElementById('introArea').style.display = 'block';
+      document.getElementById('loginArea').style.display = 'block';
+
+    }
+
+  }
+
+  function checkPassword()
+  { 
+    var tempPass = document.getElementById('password').value;
+    {{#iteration}}
+     
+      console.log(tempPass);
+      if (tempPass === '{{password}}')
+      {
+        document.getElementById('theWall').style.display = 'none';
+        document.getElementById('introArea').style.display = 'block';
+        document.getElementById('loginArea').style.display = 'block';
+      }
+      else {
+        document.getElementById('message').style.display = "block";
+      }
+    {{/iteration}}
+  }
+</script>
 
 
  </head>
@@ -25,17 +68,33 @@
       <article id="logo"></article>
     </section>
 
-    <section id="introArea">
-        Introduction Text Here
-    </section>
+<section id="theWall">
+  <section class="passwordArea">
+    
+    <h4>Enter Password</h4><br>
+    <input class="form-control textStyle inputWallStyle" type="password" name="name" placeholder="PASSWORD" id="password"><br>
+    <input class="btn btn-default submitWallStyle" value="Submit" onclick="checkPassword()">
 
-      <section id="loginArea"> 
-        <form action="/SubmitToExperiment?exp_id={{experimentId}}&iteration_id={{iteration_id}}" method="post">
-           <input class="form-control textStyle inputStyle" type="text" name="name" placeholder="NAME"><br><br><br>
-           <input class="btn btn-default submitStyle" type="submit" value="Submit">
-        </form>   
+    <section id="message">
+        <h5>You entered a wrong password. Please try again.</h5><br>
+    </section>
+  </section>
+</section>
+
+    
+      <section id="introArea">
+         
       </section>
+
+        <section id="loginArea"> 
+          <form action="/SubmitToExperiment?exp_id={{experimentId}}&iteration_id={{iteration_id}}" method="post">
+             <input class="form-control textStyle inputStyle" type="text" name="name" placeholder="NAME"><br><br><br>
+             <input class="btn btn-default submitStyle" type="submit" value="Submit">
+          </form>   
+        </section>
+      
   </section>  
 </body>
 </html>
+
 

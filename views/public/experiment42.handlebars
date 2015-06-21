@@ -680,24 +680,18 @@ function getParameterByName(name) {
                       if (k==1 ) td.innerHTML = name;
                       if (k == 2) td.innerHTML = "<input class='numStyle' type='number' id='tip" +quesNum+prodNum+ "' name='tip' min='0' step='1' value='0' onchange='checkValidTip(this.value)'>";
                       if (k==3) {
-                         td.innerHTML = "<select class='inpStyle rateSelect' name='rating' id='rate"+quesNum + prodNum+"'>";
-                         td.innerHTML+= "</select>";
-                         // td.innerHTML+= "<option value='Very Helpfull' selected>Very Helpfull</option>";
-                         // td.innerHTML+= "<option value='Helpfull'>Helpfull</option>";
-                         // td.innerHTML+= "<option value='So so'>So so</option>";
-                         // td.innerHTML+= "<option value='Did not helped at all'>Did not helped at all</option>"; 
-                         // td.innerHTML+= "<option value='BAD!'>BAD!</option>";
+                         td.innerHTML = "<select class='inpStyle rateSelect' name='rating' id='rate"+quesNum + prodNum+"'> <option value='Very Helpfull' selected>Very Helpfull</option> <option value='Helpfull'>Helpfull</option> <option value='So so'>So so</option> <option value='Did not helped at all'>Did not helped at all</option> <option value='BAD!'>BAD!</option> </select>";
                          // 
                          // {
                          //  td.innerHTML+= "<option value='{{details.1.rate1}}' selected>{{details.1.rate1}}</option>"
                          // }
                          //console.log({{details.1.numOfRates}});
-                        for (var n=1 ;n<={{details.1.numOfRates}} ; n++)
-                        {
-                          console.log('{{details.1.rate1}}');
-                          $('.rateSelect').append($("<option></option>").val('{{details.1.rate1}}').html("{{details.1.rate1}}"));
-                         //$('select[id^=rate]').append("<option value='{{details.1.rate1}}'>{{details.1.rate1}}</option>");
-                        }
+                        // for (var n=1 ;n<={{details.1.numOfRates}} ; n++)
+                        // {
+                        //   console.log('{{details.1.rate1}}');
+                        //   $('.rateSelect').append($("<option></option>").val('{{details.1.rate1}}').html("{{details.1.rate1}}"));
+                        //  //$('select[id^=rate]').append("<option value='{{details.1.rate1}}'>{{details.1.rate1}}</option>");
+                        // }
                          
                       }
                      

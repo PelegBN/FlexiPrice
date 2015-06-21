@@ -223,50 +223,77 @@ exports.updateUser = function (userN) {
 }
 
 
-
 //INSERT INTO `flexiprice`.`experiments` (`user_id`, `category_id`, `experiment_name`, `experiment_desc`, `creation_date`, `last_modified`, `survey_link`, `show_prices`, `open_negotiation`, `use_min_price`, `private`, `active`) 
 //VALUES ('1', '1', 'hello', 'something', '12/04/15', '15/04/15', 'link.com', '1', '0', '0', '0', '1');
-exports.newExperiment = function (name, description, privateExp, embbedCode, category, showPrices, tries, user_idNew, openNegotiation, useMinPrice, wallet) {
+
+//INSERT INTO `flexiprice`.`titlesNMessages` (`experimentID`, `introduction`, `conclusion`, `showPricesON`, `minPriceON`, `minPriceOFF`, `openNegotiation`, `aboveProducts`, `priceTooLow`, `ratingHeader`, `ratingSubHeader`, `rate1`, `rate2`, `rate3`, `rate4`, `rate5`, `rate6`, `rate7`, `rate8`, `rate9`, `rate10`) 
+//VALUES ('12', 'dfsdfsdf', 'fdfsf', 'fdsfdsf', 'fdsfsdf', 'fdsfsdf', 'fdfsd', 'fsdffdsfs', 'dfdsfsd', 'dfsfsd', 'fdsfdsfs', 'fdsfs', 'fdsfsf', 'fdsfsdf', 'dfsfsdf', 'fdfsf', 'fsdfsd', 'dfsdf', 'dsf', 'fds', 'dfs');
+
+exports.newExperiment = function (user_id, details) {
   console.log("==== Adding new experiment ====");
-  console.log(name + " " + description + " " + privateExp + " " + category + " " + showPrices  + " " + tries  + " " +  openNegotiation + " " + useMinPrice + " " + wallet);
-
-  if (!privateExp) {
-    privateExp = 'off';
+  
+  if (details.showPrices == "false") {
+    details.showPrices = 'off';
+  }
+  if (details.showPrices == "true") {
+    details.showPrices = 'on';
   }
 
-  if (!showPrices) {
-    showPrices = 'off';
+  if (details.openNegotiation == "false") {
+    details.openNegotiation = 'off';
+  }
+  if (details.openNegotiation == "true") {
+    details.openNegotiation = 'on';
   }
 
-  if (!openNegotiation) {
-    openNegotiation = 'off';
+  if (details.MinPrice == "false") {
+    details.MinPrice = 'off';
+  }
+  if (details.MinPrice == "true") {
+    details.MinPrice = 'on';
   }
 
-  if (!useMinPrice) {
-    useMinPrice = 'off';
+  if(details.MaxTries == "") {
+    details.MaxTries = 0;
   }
 
-  if(!tries) {
-    tries = 0;
-  }
+  var rates = JSON.parse(details.ratesArray);
 
   var today = getTodayDate();
 
   var post = {
-    user_id: user_idNew,
-    category_id: category,
-    experiment_name: name,
-    experiment_desc : description,
+    user_id: user_id,
+    category_id: details.Category,
+    experiment_name: details.ExpName,
+    experiment_desc : details.ExpDesc,
     creation_date: today,
     last_modified: today,
-    gizmo_code: embbedCode,
-    show_prices: showPrices,
-    open_negotiation: openNegotiation,
-    use_min_price: useMinPrice,
-    private: privateExp,
+    gizmo_code: details.GizmoCode,
+    show_prices: details.showPrices,
+    open_negotiation: details.openNegotiation,
+    use_min_price: details.MinPrice,
     active: '1',
-    max_tries: tries,
-    starting_wallet: wallet
+    max_tries: details.MaxTries,
+    starting_wallet: details.Wallet
+  };
+
+  var post2 = {
+    introduction: details.intro,
+    conclusion: details.conclusion,
+    showPricesON: details.msgPriceOn,
+    minPriceON: details.msgMinPriceOn,
+    minPriceOFF: details.msgMinPriceOff,
+    openNegotiation: details.msgNegoOn,
+    aboveProducts: details.msgAboveProducts,
+    priceTooLow: details.msgPriceLow,
+    ratingHeader: details.rateHeader,
+    ratingSubHeader: details.rateSubHeader,
+    numOfRates: rates.length
+  };
+
+  for (var i=0; i<rates.length ; i++)
+  {
+    post2['rate'+(i+1)] = rates[i];
   }
 
   pool.getConnection(function (err, connection){
@@ -275,7 +302,18 @@ exports.newExperiment = function (name, description, privateExp, embbedCode, cat
         console.log(err);
       }
       if (err == null) {                           
+        console.log(result.insertId);
+        var tempID = result.insertId;
+        post2['experimentID'] = tempID;
+        connection.query('INSERT INTO flexiprice.titlesNMessages SET ?', post2, function (err, result) {
+          if (err != null) {
+            console.log(err);
+          }
+          if (err == null) {                           
 
+          }
+             
+        });
       }
           connection.end();
     });
@@ -283,86 +321,96 @@ exports.newExperiment = function (name, description, privateExp, embbedCode, cat
 
 }
 
-//UPDATE `flexiprice`.`experiments` SET `user_id`='2', `category_id`='2', `experiment_name`='Real experiment1', `experiment_desc`='This experiment has a real embed code!', 
-//`creation_date`='16/04/20151', `last_modified`='16/04/20151', `gizmo_code`=' gizmo code ', 
-//`show_prices`='off', `open_negotiation`='on', `use_min_price`='on', `active`='0', `max_tries`='3' WHERE `experiment_id`='12';
-exports.updateExperiment = function (name, description, privateExp, embbedCode, category, showPrices, tries, user_idNew, openNegotiation, useMinPrice, wallet, exp_id, shareLink, token) {
-  console.log("==== Editin  experiment "+exp_id+ "====");
-  console.log(shareLink + " " + token);
 
-  if (!privateExp) {
-    privateExp = 'off';
+exports.updateExperiment = function (user_id, experiment_id, details) {
+  console.log("==== Updating experiment " +experiment_id+ " ====");
+  
+  if (details.showPrices == "false") {
+    details.showPrices = 'off';
+  }
+  if (details.showPrices == "true") {
+    details.showPrices = 'on';
   }
 
-  if (!showPrices) {
-    showPrices = 'off';
+  if (details.openNegotiation == "false") {
+    details.openNegotiation = 'off';
+  }
+  if (details.openNegotiation == "true") {
+    details.openNegotiation = 'on';
   }
 
-  if (!openNegotiation) {
-    openNegotiation = 'off';
+  if (details.MinPrice == "false") {
+    details.MinPrice = 'off';
+  }
+  if (details.MinPrice == "true") {
+    details.MinPrice = 'on';
   }
 
-  if (!useMinPrice) {
-    useMinPrice = 'off';
+  if(details.MaxTries == "") {
+    details.MaxTries = 0;
   }
 
-  if(!tries) {
-    tries = 0;
-  }
+  var rates = JSON.parse(details.ratesArray);
 
   var today = getTodayDate();
 
   var post = {
-    user_id: user_idNew,
-    category_id: category,
-    experiment_name: name,
-    experiment_desc : description,
-    //creation_date: today,
+    user_id: user_id,
+    category_id: details.Category,
+    experiment_name: details.ExpName,
+    experiment_desc : details.ExpDesc,
+    creation_date: today,
     last_modified: today,
-    gizmo_code: embbedCode,
-    show_prices: showPrices,
-    open_negotiation: openNegotiation,
-    use_min_price: useMinPrice,
-    private: privateExp,
+    gizmo_code: details.GizmoCode,
+    show_prices: details.showPrices,
+    open_negotiation: details.openNegotiation,
+    use_min_price: details.MinPrice,
     active: '1',
-    max_tries: tries,
-    starting_wallet: wallet,
-    survey_link: shareLink
-  }
-
-  pool.getConnection(function (err, connection){
-    connection.query('UPDATE flexiprice.experiments SET ?  WHERE experiment_id = ?', [post, exp_id], function (err, result) {
-      if (err != null) {
-        console.log(err);
-      }
-      if (err == null) {                           
-
-      }
-          connection.end();
-    });
-  });
+    max_tries: details.MaxTries,
+    starting_wallet: details.Wallet
+  };
 
   var post2 = {
-    iteration_id: token,
-    experiment_id: exp_id,
-    researcher_id: user_idNew,
-    link: shareLink
+    introduction: details.intro,
+    conclusion: details.conclusion,
+    showPricesON: details.msgPriceOn,
+    minPriceON: details.msgMinPriceOn,
+    minPriceOFF: details.msgMinPriceOff,
+    openNegotiation: details.msgNegoOn,
+    aboveProducts: details.msgAboveProducts,
+    priceTooLow: details.msgPriceLow,
+    ratingHeader: details.rateHeader,
+    ratingSubHeader: details.rateSubHeader,
+    numOfRates: rates.length
+  };
+
+  for (var i=0; i<rates.length ; i++)
+  {
+    post2['rate'+(i+1)] = rates[i];
   }
 
-  //INSERT INTO `flexiprice`.`iterations` (`iteration_id`, `experiment_id`, `researcher_id`, `link`) VALUES ('something', '12', '4', 'gfgdfgdf');
   pool.getConnection(function (err, connection){
-    connection.query('INSERT INTO flexiprice.iterations SET ?', post2, function (err, result) {
+    connection.query('UPDATE flexiprice.experiments SET ?  WHERE experiment_id = ?', [post, experiment_id], function (err, result) {
       if (err != null) {
         console.log(err);
       }
       if (err == null) {                           
+        connection.query('UPDATE flexiprice.titlesNMessages SET ? WHERE experimentID = ?', [post2, experiment_id], function (err, result) {
+          if (err != null) {
+            console.log(err);
+          }
+          if (err == null) {                           
 
+          }
+             
+        });
       }
           connection.end();
     });
   });
 
 }
+
 
 //DELETE FROM `flexiprice`.`experiments` WHERE `experiment_id`='20';
 exports.deleteExperiment = function (exp_id) {
@@ -427,7 +475,7 @@ exports.getExperiment = function (wanted) {
   var deferred = Q.defer();
   console.log("experiment_id: " + wanted)
    pool.getConnection(function (err, connection) {
-   var sql = 'SELECT * FROM flexiprice.experiments where experiment_id=?;'
+   var sql = 'SELECT * FROM flexiprice.experiments inner join flexiprice.titlesNMessages where experiments.experiment_id=titlesNMessages.experimentID and experiment_id=?;'
      connection.query(sql, wanted , function (err, rows) {
     if (err!= null) {
       console.log("Error finding experiments" + err);
@@ -623,17 +671,6 @@ exports.updateProduct = function (name, description, value, min_price, url, file
 
  var final_url;
 
-  // if (url == null && file_url != "")
-  // {
-  //   final_url = file_url;
-  // }
-
-
-  // if (url != null && file_url == "")
-  // {
-  //   final_url = url;
-  // }
-
   switch(type)
   {
     case 'URL': final_url = url; break;
@@ -752,7 +789,7 @@ exports.getRunningExperiment = function (experiment_id) {
   var deferred = Q.defer();
  
    pool.getConnection(function (err, connection) {
-   var sql = 'SELECT * FROM experiments INNER JOIN products ON experiments.category_id = products.category_id And experiments.experiment_id =?;'
+   var sql = 'SELECT * FROM experiments INNER JOIN products ON experiments.category_id = products.category_id inner join titlesNMessages ON experiments.experiment_id = titlesNMessages.experimentID And experiments.experiment_id =?;'
      connection.query(sql, experiment_id , function (err, rows) {
     if (err!= null) {
       console.log("Error finding running experiment" + err);
@@ -811,53 +848,8 @@ exports.iterationDetails = function (details) {
     sessionID: details.sessionID
   }
 
-  //Update User
-  var postUpdate = {
-    iteration_id: details.iteration,
-    grade: details.grade,
-    balance : details.balance,
-    sessionID: details.sessionID
-  }
-
   pool.getConnection(function (err, connection){
-    connection.query('SELECT * FROM flexiprice.users where name = \"' + details.name + '\" and iteration_id='+details.iteration+';' ,function(err, rows, fields) {
-      if (err!= null) {
-        console.log("Error finding user" + err);
-      }
-      if (err == null) {
-        if (rows.length > 0)
-        {
-          var tempUserId1;
-          var tempSession;
-          for (var i in rows) {
-            console.log(rows[i].name +" "+ rows[i].user_id);
-            tempUserId1 = rows[i].user_id;
-            tempSession = rows[i].sessionID;
-          }
 
-          connection.query('UPDATE flexiprice.users SET ? WHERE user_id = ?', [postUpdate, tempUserId1], function (err, result) {
-            if (err != null) {
-              console.log(err);
-            }
-            if (err == null) {      
-
-                connection.query('DELETE FROM flexiprice.questionToProduct WHERE sessionID = ?', tempSession, function (err, result) {
-                  if (err != null) {
-                    console.log(err);
-                  }
-                  if (err == null) {             
-                      
-                  }
-                     
-                });                       
-              exports.iterationDetailsQuestions(details, tempUserId1);
-            }
-                connection.end();
-          });
-
-        }
-        else {
-          console.log("User Doesn't exist");
           connection.query('INSERT INTO flexiprice.users SET ?', postNew, function (err, result) {
             if (err != null) {
               console.log(err);
@@ -868,13 +860,6 @@ exports.iterationDetails = function (details) {
             }
                 connection.end();
           });
-        }
-        
-     }
-
-    });
-
-    
   });
 
   
@@ -931,11 +916,14 @@ exports.questionToProduct = function(details, userID, questions)
           questionID: questions[i],
           productID: details["question_array["+i+"][products]["+j+"][product_id]"],
           min_price: details["question_array["+i+"][products]["+j+"][min_price]"],
-          subjective_price: JSON.stringify(details["question_array["+i+"][products]["+j+"][subjective_price][]"]).replace(/['"]+/g, ''), 
           revealed_price: details["question_array["+i+"][products]["+j+"][revealed_price]"],
           paid_price: details["question_array["+i+"][products]["+j+"][paid_price]"], 
           rating: JSON.stringify(details["question_array["+i+"][products]["+j+"][rating]"]).replace(/['"]+/g, ''),
           sessionID: details.sessionID
+        }
+        if (details["question_array["+i+"][products]["+j+"][subjective_price][]"] != null)
+        {
+            postProduct['subjective_price']=JSON.stringify(details["question_array["+i+"][products]["+j+"][subjective_price][]"]).replace(/['"]+/g, '');
         }
 
         connection.query('INSERT INTO flexiprice.questionToProduct SET ?', postProduct, function (err, result) {
@@ -972,16 +960,79 @@ exports.updateIteration = function(iterationId){
    });
 }
 
+exports.modifyIteration = function(iterationId, details){
+  console.log("==== Modify iteration id: "+ iterationId +" ====");
 
-function randomString() {
-  var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
-  var string_length = 8;
-  var randomstring = '';
-  for (var i=0; i<string_length; i++) {
-    var rnum = Math.floor(Math.random() * chars.length);
-    randomstring += chars.substring(rnum,rnum+1);
+if (details.privateIteration == "false") {
+    details.privateIteration = 'off';
   }
-  return randomstring;
+  if (details.privateIteration == "true") {
+    details.privateIteration = 'on';
+  }
+
+  var post = {
+  comment: details.comment,
+  private: details.privateIteration}
+
+  if(details.privateIteration == 'on')
+  {
+    post['password'] = details.iterationPassword;
+  }
+
+  pool.getConnection(function (err, connection){
+     var sql = 'UPDATE flexiprice.iterations SET ? WHERE iteration_id=?;'
+     connection.query(sql, [post,iterationId] , function (err, rows) {
+      if (err != null) {
+        console.log(err);
+      }
+      if (err == null) {                           
+
+      }
+          connection.end();
+    });  
+   });
+
+}
+
+
+
+exports.newIteration = function(userId, details){
+  console.log("==== Create new iteration ====");
+
+  if (details.privateIteration == "false") {
+    details.privateIteration = 'off';
+  }
+  if (details.privateIteration == "true") {
+    details.privateIteration = 'on';
+  }
+
+  var post = {
+    comment: details.comment,
+    private: details.privateIteration,
+    iteration_id: details.iteration_id,
+    experiment_id: details.experiment_id,
+    link: details.link,
+    subjects: details.subjects,
+    researcher_id: userId
+  }
+
+  if(details.privateIteration == 'on')
+  {
+    post['password'] = details.iterationPassword;
+  }
+
+  pool.getConnection(function (err, connection){
+     var sql = 'INSERT INTO flexiprice.iterations SET ?'
+     connection.query(sql, post , function (err, rows) {
+      if (err != null) {
+        console.log(err);
+      }
+      if (err == null) {                           
+
+      }
+          connection.end();
+    });  
+   });
 }
 
 //Getting Iteration Details for excel
@@ -1080,4 +1131,47 @@ sql += 'inner JOIN (select experiments.experiment_name, experiments.user_id, exp
   return deferred.promise;
 }
 
+exports.getIntro = function (exp_id) {
+  var deferred = Q.defer();
+ 
+   pool.getConnection(function (err, connection) {
+   var sql = 'SELECT introduction FROM flexiprice.titlesNMessages where experimentID=?;';     
+   connection.query(sql, exp_id , function (err, rows) {
+    if (err!= null) {
+      console.log("Error finding introduction" + err);
+      deferred.reject(new Error(err.body));
+    }
 
+    if (err == null) {
+         deferred.resolve(rows);
+       }  
+       connection.end();
+    
+    });
+   });
+
+  return deferred.promise;
+}
+
+exports.getIteration = function (iteration_id) {
+  var deferred = Q.defer();
+ 
+   pool.getConnection(function (err, connection) {
+   var sql = 'SELECT * FROM flexiprice.iterations ';
+ sql+= 'where iterations.iteration_id=?;';
+     connection.query(sql, iteration_id , function (err, rows) {
+    if (err!= null) {
+      console.log("Error finding iterations" + err);
+      deferred.reject(new Error(err.body));
+    }
+
+    if (err == null) {
+         deferred.resolve(rows);
+       }  
+       connection.end();
+    
+    });
+   });
+
+  return deferred.promise;
+}

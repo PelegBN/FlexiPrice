@@ -144,6 +144,7 @@ var hbs = exphbs.create({
           
           return JSON.parse(value);
         }
+        
     }
 });
 app.engine('handlebars', hbs.engine);
@@ -583,25 +584,6 @@ app.post('/SubmitModifiedExperiment:experiment_id', function(req, res){
   res.redirect('/Experiments');
 });
 
-app.post('/SubmitModifiedIteration:iteration_id', function(req, res){
-
-  var details = req.body;
-  //console.log(details);
-  
-  var id = (req.params.iteration_id).replace(/[^0-9]/g, '');
-  console.log(id);
-  funct.modifyIteration(id, req.body);
-  res.redirect('/Experiments');
-});
-
-app.post('/SubmitNewIteration', function(req, res){
-
-  var details = req.body;
-
-  funct.newIteration(req.user.user_id, req.body);
-  res.redirect('/Experiments');
-});
-
 //Delete experiment
 app.get('/DeleteExperiment:experiment_id' , isLoggedIn, function(req, res){
   console.log(req.user.user_id);
@@ -851,7 +833,6 @@ app.get('/sign_s3', isLoggedIn, function(req, res){
     });
 });
 
-
 //Running Experiment!!!!!
 app.get('/experimentWelcomePage', function(req, res){
   var urlPart = url.parse(req.url, true);
@@ -859,28 +840,11 @@ app.get('/experimentWelcomePage', function(req, res){
   //var id = (req.params.id).replace(/[^0-9]/g, ''); ;
   console.log("experiment_id: " + query.exp_id + ", iteration_id " + query.iteration_id);
 
-funct.getIteration(query.iteration_id)
+  funct.getIntro(query.exp_id)
     .then(function (itemsList) {
       if (itemsList) {
-         console.log("Items length:" + itemsList.length);
-         console.log (itemsList);
-        funct.getIntro(query.exp_id)
-            .then(function (intro) {
-              if (intro) {
-                console.log (intro);
-                res.render('RunningExperiment/experimentWelcomePage', {layout: false, experimentId:query.exp_id, iteration_id: query.iteration_id, intro:intro[0].introduction, iteration: itemsList, private: itemsList[0].private});
-                done(null, intro, itemsList);
-              }
-              if (!intro) {
-                console.log("COULD NOT FIND");
-                done(null, intro);
-              }
-            })
-            .fail(function (err){
-              console.log("**** Error: " + err.body);
-            });
-
-          //res.render('showIteration', {user: req.user, iteration: itemsList});
+        console.log (itemsList);
+        res.render('RunningExperiment/experimentWelcomePage', {layout: false, experimentId:query.exp_id, iteration_id: query.iteration_id, intro:itemsList[0].introduction});
         done(null, itemsList);
       }
       if (!itemsList) {
@@ -891,9 +855,6 @@ funct.getIteration(query.iteration_id)
     .fail(function (err){
       console.log("**** Error: " + err.body);
     });
-
-
-  
 });
 
 //Submit and start Experiment!!!!!
@@ -969,33 +930,6 @@ app.post('/iterationSubmit', function(req, res){
   funct.iterationDetails(req.body);
   res.send(req.body);
   
-});
-
-
-//Show Iteration page
-app.get('/iteration:id', isLoggedIn, function(req, res){
-  console.log("User id: " + req.user.user_id);
-
-  var id = (req.params.id).replace(/[^0-9]/g, ''); ;
-  console.log("iteration_id: " + id);
-
-    funct.getIteration(id)
-    .then(function (itemsList) {
-      if (itemsList) {
-         console.log("Items length:" + itemsList.length);
-         console.log (itemsList);
-
-          res.render('showIteration', {user: req.user, iteration: itemsList});
-        done(null, itemsList);
-      }
-      if (!itemsList) {
-        console.log("COULD NOT FIND");
-        done(null, itemsList);
-      }
-    })
-    .fail(function (err){
-      console.log("**** Error: " + err.body);
-    });
 });
 
 
@@ -1132,6 +1066,32 @@ app.get('/Excel', isLoggedIn, function(req, res){
               console.log("**** Error: " + err.body);
              });
 });
+
+//Show Iteration page
+app.get('/iteration:id', isLoggedIn, function(req, res){
+  console.log("User id: " + req.user.user_id);
+
+  var id = (req.params.id).replace(/[^0-9]/g, ''); ;
+  console.log("iteration_id: " + id);
+
+    funct.getIteration(id)
+    .then(function (itemsList) {
+      if (itemsList) {
+         console.log("Items length:" + itemsList.length);
+         console.log (itemsList);
+          res.render('showIteration', {user: req.user, iteration: itemsList});
+        done(null, itemsList);
+      }
+      if (!itemsList) {
+        console.log("COULD NOT FIND");
+        done(null, itemsList);
+      }
+    })
+    .fail(function (err){
+      console.log("**** Error: " + err.body);
+    });
+});
+
 
 //===============PORT=================
 var port = process.env.PORT || 5000; //select your port or let it pull from your .env file

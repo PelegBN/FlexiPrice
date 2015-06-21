@@ -9,7 +9,8 @@
 body {
 	height:100%;
     margin-top: 100px;
-    background-color: #222;
+    //background-color: #222;
+    background-color: #231023;
 }
 
 @media(min-width:768px) {
@@ -39,8 +40,6 @@ a:hover {
 
 .del:hover {
 	color: #FF4641;
-	cursor: pointer;
-	cursor: hand;
 }
 
 .BreadCrumbsStyle > li > a {
@@ -48,7 +47,7 @@ a:hover {
 	//text-decoration: none;
 }
 
-.BreadCrumbsStyle > li > a:hovr {
+.BreadCrumbsStyle > li > a:hover {
 	color: #666;
 	//text-decoration: none; 
 }
@@ -179,7 +178,8 @@ ul.alert-dropdown {
     border: none;
     border-radius: 0;
     overflow-y: auto;
-    background-color: #222;
+    //background-color: #222;
+    background-color: #231023;
     bottom: 0;
     overflow-x: hidden;
     padding-bottom: 40px;
@@ -999,19 +999,10 @@ ul.alert-dropdown {
 									box-shadow: inset 0px 1px 10px 0px #222;
 								}
 
-								.passwordStyle {
-									border: 1px solid #aaa;
-									height: 34px;
-									width: 100%;
-									padding-left: 10px;
-									border-radius: 5px 0px 0px 5px;
-									background: rgba(40, 40, 40, 0.5); 
-									color: #eee;
-									box-shadow: inset 0px 1px 10px 0px #222;
-								}
-
 								.genPassStyle {
 									border: none;
+									margin-top:-2px;
+									margin-left:-3px;
 									line-height: 20px;
 									//border-radius: 0px 10px 10px 0px;
 									background: rgba(40, 40, 40, 0.9); 

@@ -17,6 +17,9 @@ function generalPressed() {
 	
 	document.getElementById('InterationTab').style.color = "#ddd";
 	document.getElementById('InterationTab').style.background = "rgba(40, 40, 40, 0.5)";
+
+	document.getElementById('iterationTable').style.display = "block";	
+	document.getElementById('viewIteration').style.display = "none";
 }
 
 function participantsPressed() {
@@ -32,6 +35,9 @@ function participantsPressed() {
 	
 	document.getElementById('InterationTab').style.color = "#ddd";
 	document.getElementById('InterationTab').style.background = "rgba(40, 40, 40, 0.5)";
+
+	document.getElementById('iterationTable').style.display = "block";	
+	document.getElementById('viewIteration').style.display = "none";
 }
 
 function iterationPressed() {
@@ -46,8 +52,65 @@ function iterationPressed() {
 	document.getElementById('ParticipantsTab').style.background = "rgba(40, 40, 40, 0.5)";
 	
 	document.getElementById('InterationTab').style.color = "#f2b37f";
-	document.getElementById('InterationTab').style.background = "rgba(40, 40, 40, 0.7)";
+	document.getElementById('InterationTab').style.background = "rgba(40, 40, 40, 0.7)";	
+}
+
+function editIterationPressed(index) {
+	console.log(index);
+	document.getElementById('generalSection').style.display = "none";
+	document.getElementById('participantsSection').style.display = "none";
+	document.getElementById('iterationSection').style.display = "block";
 	
+	document.getElementById('generalTab').style.color = "#ddd";
+	document.getElementById('generalTab').style.background = "rgba(40, 40, 40, 0.5)";
+	
+	document.getElementById('ParticipantsTab').style.color = "#ddd";
+	document.getElementById('ParticipantsTab').style.background = "rgba(40, 40, 40, 0.5)";
+	
+	document.getElementById('InterationTab').style.color = "#f2b37f";
+	document.getElementById('InterationTab').style.background = "rgba(40, 40, 40, 0.7)";
+
+	document.getElementById('iterationTable').style.display = "none";	
+	document.getElementById('viewIteration').style.display = "block";	
+}
+
+function newIterationPressed() {
+	document.getElementById('generalSection').style.display = "none";
+	document.getElementById('participantsSection').style.display = "none";
+	document.getElementById('iterationSection').style.display = "block";
+	
+	document.getElementById('generalTab').style.color = "#ddd";
+	document.getElementById('generalTab').style.background = "rgba(40, 40, 40, 0.5)";
+	
+	document.getElementById('ParticipantsTab').style.color = "#ddd";
+	document.getElementById('ParticipantsTab').style.background = "rgba(40, 40, 40, 0.5)";
+	
+	document.getElementById('InterationTab').style.color = "#f2b37f";
+	document.getElementById('InterationTab').style.background = "rgba(40, 40, 40, 0.7)";
+
+	document.getElementById('iterationTable').style.display = "none";	
+	document.getElementById('viewIteration').style.display = "block";
+
+	var link = createLink();
+
+}
+
+function iterationSubmitPressed() {
+	document.getElementById('generalSection').style.display = "none";
+	document.getElementById('participantsSection').style.display = "none";
+	document.getElementById('iterationSection').style.display = "block";
+	
+	document.getElementById('generalTab').style.color = "#ddd";
+	document.getElementById('generalTab').style.background = "rgba(40, 40, 40, 0.5)";	
+	
+	document.getElementById('ParticipantsTab').style.color = "#ddd";
+	document.getElementById('ParticipantsTab').style.background = "rgba(40, 40, 40, 0.5)";
+	
+	document.getElementById('InterationTab').style.color = "#f2b37f";
+	document.getElementById('InterationTab').style.background = "rgba(40, 40, 40, 0.7)";
+
+	document.getElementById('iterationTable').style.display = "block";	
+	document.getElementById('viewIteration').style.display = "none";	
 }
 
 // New Product Radio Buttons
@@ -167,16 +230,23 @@ function minimumPrice(){
 function privateSwitch(){
 	var privateSwitch = document.getElementById('PrivateOnOffSwitch');
 	if (privateSwitch.checked )	{
-		if (document.getElementById('tableBody').children.length == 0){
-			document.getElementById('addrow').click();
-			document.getElementById('tableDisabler').style.display = "none";
+			randomString();
 		}
-		else 
-			document.getElementById('tableDisabler').style.display = "none";
-		}
-	else {
-		document.getElementById('tableDisabler').style.display = "block";
-	}
+}
+
+// Password Generator
+function randomString() {
+  var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+  var string_length = 8;
+  var randomstring = '';
+  for (var i=0; i<string_length; i++) {
+    var rnum = Math.floor(Math.random() * chars.length);
+    randomstring += chars.substring(rnum,rnum+1);
+  }
+
+  //$(this).closest("input[name='password']").val(randomstring);
+  document.getElementById('password').value = randomstring;
+  //return randomstring;
 }
 	
 // User-Password Table
@@ -191,18 +261,19 @@ function privateSwitch(){
         var cols = "";
 
         cols += '<td><input class="tableStyle" type="text" name="name' + counter + '"/></td>';
-        cols += '<td><input class="tableStyle" type="text" name="price' + counter + '"/></td>';
+        cols += '<td><input class="tablePasswordStyle" type="text" name="password"' + counter + '"/> <article class="btn btn-default genPassStyle">Generate</article> </td>';
 
         cols += '<td><input type="button" class="ibtnDel delRow"  value="Delete"></td>';
         newRow.append(cols);
-        if (counter == 200) $('#addrow').attr('disabled', true).prop('value', "You've reached the limit");
+        if (counter == 50) $('#addrow').attr('disabled', true).prop('value', "You've reached the limit");
         $("table.order-list").append(newRow);
         counter++;
     });
 
-    $("table.order-list").on("change", 'input[name^="price"]', function (event) {
-        calculateRow($(this).closest("tr"));
-          
+    $("table.order-list").on("click", ".genPassStyle" , function (event) {
+    	var temp = randomString();
+    	console.log(temp);
+        $(this).closest("td").find("input[name='password']").val(temp);
     });
 
 
@@ -217,14 +288,10 @@ function privateSwitch(){
 
 });
 
-function calculateRow(row) {
-    var price = +row.find('input[name^="price"]').val();
-
-}
 
 // Rating Table
 	$(document).ready(function () {
-    var counter = 0;
+    var counter = 3;
 
     $("#addRatingRow").on("click", function () {
 
@@ -233,7 +300,7 @@ function calculateRow(row) {
         var newRow = $("<tr>");
         var cols = "";
 		cols += '<td class="tableNumbers">' + (counter+1) + '</td>';
-        cols += '<td><input class="ratingTableStyle" type="text" name="name' + counter + '"/></td>';
+        cols += '<td><input class="ratingTableStyle" type="text" name="rate' + counter + '" maxlength="45"/></td>';
         cols += '<td><input type="button" class="ibtnDel delRow"  value="Delete"></td>';
         newRow.append(cols);
         if (counter == 9) $('#addRatingRow').attr('disabled', true).prop('value', "You've reached the limit");
@@ -241,29 +308,27 @@ function calculateRow(row) {
         counter++;
     });
 
-    $("table.rating-list").on("change", 'input[name^="price"]', function (event) {
-        calculateRow($(this).closest("tr"));
-     });
-
-
     $("table.rating-list").on("click", ".ibtnDel", function (event) {
         $(this).closest("tr").remove();
         var rearrange = document.getElementsByClassName('tableNumbers');
+        var rearrange2 = document.getElementsByClassName('ratingTableStyle');
         for (var i=0 ; i<rearrange.length ; i++)
         {
+        	
+        	var temp = "rate"+i;
+        	console.log("rearrange + " + temp);
         	rearrange[i].innerHTML = i+1;
+        	rearrange2[i].name = temp;
         }
         counter -= 1
         $('#addRatingRow').attr('disabled', false).prop('value', "Add Row");
          
     });
-
-
 });
 
-function calculateRow(row) {
-    var price = +row.find('input[name^="price"]').val();
 
-}
+
+
+
 
 

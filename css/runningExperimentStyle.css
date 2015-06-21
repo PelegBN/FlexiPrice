@@ -80,12 +80,16 @@ input:-webkit-autofill {
 							  height: 70%;}
 
 
-				#loginArea {margin:auto;
+				#loginArea, #PrivateArea {margin:auto;
 							margin-top: 25px;
 							width: 80%;
 							font-size: 100%;
 							height: 105px;
 							//border: 1px solid white;}
+
+							#PrivateArea {
+								display: none;
+							}
 							
 					form { color: white;
 							  height: 100%;}
@@ -211,6 +215,36 @@ input:-webkit-autofill {
 	font-size: 14px;
 }
 
+.productBought {
+	padding-top: 25px;
+	height: 128px;
+	width:128px;
+	background: #7AAE7A;
+	color: rgba(0, 0, 0, 0.6);
+	border-radius: 15px;
+	box-shadow: inset 0px 1px 7px 1px #000;
+	display: inline-block;
+	border: 1px solid #555555;
+	margin-right: 15px;
+	margin-top: 15px;
+	font-size: 14px;
+}
+
+.productBought:hover {
+	padding-top: 25px;
+	height: 128px;
+	width:128px;
+	background: #8BC88B;
+	color: rgba(0, 0, 0, 0.6);
+	border-radius: 15px;
+	border: 1px solid #444;
+	display: inline-block;
+	//float: left;
+	margin-right: 15px;
+	margin-top: 15px;
+	font-size: 14px;
+}
+
 #introArea{
 	margin:auto;
 	padding: 15px;
@@ -251,3 +285,52 @@ input:-webkit-autofill {
 		background: rgba(255, 255, 255, 0.5);
 		border-radius: 5px 5px 0px 0px;
 	}
+
+#theWall {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 10;
+	background: radial-gradient(#555,  #333); 
+	text-align: center;
+}
+
+.passwordArea {
+	margin: auto;
+	margin-top: 25%;
+	width: 250px;
+	height: 250px;
+	text-align: center;
+}
+
+.submitWallStyle {
+	background-color: #ed954d;
+	color: #333;
+	margin: auto;
+	display:block;
+	width: 150px;
+	font-size: 20px;
+	font-family: fantasy ;
+}
+
+.submitWallStyle:hover {
+	background-color: #f2b37f;
+	color: #444;
+}
+
+.inputWallStyle { box-shadow: inset 0px 1px 10px 0px #222;
+					background: rgba(40, 40, 40, 0.4);
+					//color: #66afe9;
+					color: #fff;
+					//text-shadow: 0px 0px 5px #bcdcf5;
+					margin: auto;
+					width: 150px;
+					height: 40px;
+					border: 1px solid #454545;
+					display: block;
+					text-align: center;}
+
+#message {
+	display: none;
+	font-size: 20px;
+}

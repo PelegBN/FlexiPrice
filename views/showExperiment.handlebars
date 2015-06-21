@@ -5,13 +5,14 @@
     var token = Math.floor(Math.random() * 10000);
     link += token;
     console.log(link);
-    document.getElementById("shareLink").style.width = "100%";
-    document.getElementById("shareLink").style.fontSize="150%";
-    document.getElementById("shareLink").style.fontFamily = "arial";
-    document.getElementById("shareLink").value= link;
+    document.getElementById("newIterationLink").style.width = "100%";
+    document.getElementById("newIterationLink").style.fontSize="96%";
+    document.getElementById("newIterationLink").style.fontFamily = "arial";
+    document.getElementById("newIterationLink").innerText = link;
     document.getElementById("share_token").value= token;
     document.getElementById("share_link").value = link;
-    document.getElementById("shareLink").removeAttribute("onclick");
+    document.getElementById("newIterationLink").removeAttribute("onclick");
+    return link;
 }
 $(document).ready(function() {
     if("{{show_prices}}" === "on")
@@ -32,14 +33,9 @@ $(document).ready(function() {
         minimumPrice();
     }
 
-    if("{{private}}" === "on")
-    {
-        document.getElementById("PrivateOnOffSwitch").checked = true;
-        privateSwitch();
-    }
-
     document.getElementById("Categories").value = "{{category_id}}";
     });
+
 </script>
 
 
@@ -61,16 +57,10 @@ $(document).ready(function() {
             <ul class="nav navbar-right top-nav">
                 
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Natalie Menahem <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{../user.email}} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
                         <li>
@@ -108,10 +98,10 @@ $(document).ready(function() {
                         </ul>
                     </li>
                     <li>
-                        <a href="contact.html"><i class="fa fa-fw fa-send"></i> Contact</a>
+                        <a href="/contact"><i class="fa fa-fw fa-send"></i> Contact</a>
                     </li>
                      <li>
-                        <a href="about.html"><i class="fa fa-fw fa-info"></i> About</a>
+                        <a href="Help.pdf" target="_blank"><i class="fa fa-fw fa-info"></i> Help</a>
                     </li>
                      <li>
                         <a href="http://www.surveygizmo.com" target="_blank"><i class="fa fa-fw fa-link"></i> SurveyGizmo</a>
@@ -148,8 +138,6 @@ $(document).ready(function() {
                     </div>
                 </div>
                 <!-- /.row -->
-
-				<form action="/SubmitModifiedExperiment:{{experiment_id}}" method="post" role="form">
 	                 
 	                 <section id="newExperiment">
 	                 	
@@ -157,46 +145,46 @@ $(document).ready(function() {
 	                 	<article id="ParticipantsTab" class="btn btn-default tabStyle" onclick="participantsPressed()"> Exam UI</article>
 	                 	<article id="InterationTab" class="btn btn-default tabStyle" onclick="iterationPressed()"> Iteration </article>
 	                 	
-	                 		<section id="generalSection">
+ 			                 		<section id="generalSection">
 							                 	<section class="expFormLeftSide">
 										                 <div class="form-group">
 								                                <label>Experiment's Name </label>
-								                                  <input type="text" class="form-control formStyle" name="name" value="{{experiment_name}}" required>
+								                                  <input type="text" class="form-control formStyle" name="name" required id="ExpName" value="{{experiment_name}}">
 										                 </div>
 										                 
 										                 <div class="form-group">
 								                                <label>Experiment's Description </label>
-								                                <textarea class="form-control textStyle formStyle" name="description" rows="10">{{experiment_desc}}</textarea>
+								                                <textarea class="form-control textStyle formStyle" name="description" rows="10" id="ExpDesc">{{experiment_desc}}</textarea>
 								                                
 							                            </div>
 							                            
 							                            <section class="priceLeftSide">
 										                            <div class="form-group">
 											                                <label>Maximum Tries </label>
-											                                  <input type="number" min="0" class="form-control formStyle" name="points" value="{{max_tries}}" required>
+											                                  <input type="number" min="0" class="form-control formStyle" name="tries" required id="tries" value="{{max_tries}}">
 													                 </div>
 													    </section>
 													      
 													    <section class="priceRightSide">           
 													                   <div class="form-group">
 											                                <label>Wallet's Size </label>
-											                                  <input type="number" min="0" class="form-control formStyle" value="{{starting_wallet}}" name="wallet" required>
+											                                  <input type="number" min="0" class="form-control formStyle" name="wallet" required id="wallet" value="{{starting_wallet}}">
 													                 </div>
 							                            </section>
 							                            
 							                            <div class="clear"></div>
 						                        </section>
-						                            
+      
 						                        <section class="expFormRightSide">
-						                       
+						                       						                        	
 						                        	<div class="form-group">
 								                                <label>Gizmo Source Code (Javascript) </label>
-								                                  <input type="text" class="form-control formStyle" name="survaypage" value="{{gizmo_code}}" required>
+								                                  <input type="text" class="form-control formStyle" name="survaypage" required id="GizmoCode" value="{{gizmo_code}}">
 										            </div>
 										            {{/items}}
 										            <div class="form-group">
 						                                <label>Associate with a Category </label>
-						                                <select class="form-control formStyle" name="Categories">
+						                                <select class="form-control formStyle" name="Categories" id="Categories">
 						                                    {{#each categories}}
                                                                    <option value="{{category_id}}">{{category_name}}</option>
                                                             {{/each}} 
@@ -209,7 +197,7 @@ $(document).ready(function() {
 								                            	 <div class="form-group">				
 																	<label>Show Prices </label><br>
 																		<section class="onoffswitch">
-																			    <input type="checkbox" name="PriceOnOffSwitch" class="onoffswitch-checkbox" id="PriceOnOffSwitch" onclick="showPrices()">
+																			    <input type="checkbox" name="PriceOnOffSwitch" class="onoffswitch-checkbox" id="PriceOnOffSwitch" checked="checked" onclick="showPrices()">
 																			    <label class="onoffswitch-label" for="PriceOnOffSwitch">
 																			        <span class="onoffswitch-inner"></span>
 																			        <span class="onoffswitch-switch"></span>
@@ -252,38 +240,22 @@ $(document).ready(function() {
 														</section>
 														
 													</section>	
-													
-													<section class="switchesRightSide">
-															<div class="form-group">			
-																	<label>&nbsp &nbsp&nbsp Private</label> <br>
-															       <section class="onoffswitch">
-																		    <input type="checkbox" name="PrivateOnOffSwitch" class="onoffswitch-checkbox" id="PrivateOnOffSwitch" onclick="privateSwitch()">
-																		    <label class="onoffswitch-label" for="PrivateOnOffSwitch">
-																		        <span class="onoffswitch-inner"></span>
-																		        <span class="onoffswitch-switch"></span>
-																		    </label>
-																	</section>
-															</div>			
-								                   </section>
-						                   
-						                 </section>
+												</section>
 
-                                         <section class="shareSection">
-                                             <input class="btn btn-default shareStyle" type="text" onclick="createLink()" id="shareLink" value="Share Link" name="shareLink">
-                                            <input type="hidden" id="share_link" name="share_link"/>
-                                            <input type="hidden" id="share_token" name="share_token"/>
-                                         </section>
 						                 
 						                 <section class="buttonsSection">
-						                 	<input type="submit" class="btn btn-default submitStyle" onclick="participantsPressed()" value="Submit">
-						                  	 <a href="/Experiments"><article class="btn btn-default cancelStyle">Cancel</article> </a>
+						                 	<input type="submit" class="btn btn-default submitStyle" value="Submit" onclick="submitAll()"/>
+						                 	<a href="/Experiments"><article class="btn btn-default cancelStyle">Cancel</article> </a>
                                             
                                          </section>
 						            
 						                 
 		 		 			</section>
-		 		 			
-			                 <section id="participantsSection">
+
+
+
+		 		 			{{#items}}
+			                <section id="participantsSection">
 			                 	   
 			                
 										  <section class="topParticipants">          
@@ -291,64 +263,64 @@ $(document).ready(function() {
 										                 <div class="form-group">
 								                                <label>Introduction </label>
 								                                <article>
-								                                		<textarea class="editor form-control" name="intro" rows="10"></textarea>
+								                                		<textarea class="editor form-control" name="intro" rows="10" id="intro">{{introduction}}</textarea>
 								                               </article> 
 							                            </div>
 							                            
 							                             <div class="form-group">
 								                                <label>Conclusions </label>
-								                                <textarea class="editor form-control" name="summary" rows="10"></textarea>
+								                                <textarea class="editor form-control" name="summary" rows="10" id="conclusion">{{conclusion}}</textarea>
 								                                
 							                            </div>
-							                            
+							                          
 							               </section>                
 							         	   <section class="expFormLeftSide">            
 							         	   	        
 							                            <div class="form-group">
 								                                <label>Message for "Show Prices" = "ON" </label>
-								                                  <input type="text" class="form-control formStyle">
+								                                  <input type="text" class="form-control formStyle" maxlength="60" id="msgPriceOn" value="{{showPricesON}}">
 										                 </div>
 							                            
 							                             <div class="form-group">
 								                                <label>Message for "Negotiation" = "ON" </label>
-								                                  <input type="text" class="form-control formStyle">
+								                                  <input type="text" class="form-control formStyle" maxlength="60" id="msgNegoOn" value="{{openNegotiation}}">
 										                 </div>
 										                 
 										                  <div class="form-group">
 								                                <label>Message for "Minimum Price" = "ON" </label>
-								                                  <input type="text" class="form-control formStyle">
+								                                  <input type="text" class="form-control formStyle" maxlength="60" id="msgMinPriceOn" value="{{minPriceON}}">
 										                 </div> 
 										                 
 										                  <div class="form-group">
-								                                <label>Message for "Minimum Price" = "OFF" </label>
-								                                  <input type="text" class="form-control formStyle">
+								                                <label>Message for "Minimum Price" = "OFF" </label> 
+								                                  <input type="text" class="form-control formStyle" maxlength="60" id="msgMinPriceOff" value="{{minPriceOFF}}">
 										                 </div> 
 										                 
 										                 <div class="form-group">
 								                                <label>Message Seen Above the Products  </label>
-								                                  <input type="text" class="form-control formStyle">
+								                                  <input type="text" class="form-control formStyle" maxlength="60" id="msgAboveProducts" value="{{aboveProducts}}">
 										                 </div> 
 										                 
 										                  <div class="form-group">
 								                                <label>Message for Entering a Price that is Too Low </label>
-								                                  <input type="text" class="form-control formStyle">
+								                                  <input type="text" class="form-control formStyle" maxlength="60" id="msgPriceLow" value="{{priceTooLow}}">
 										                 </div>
 							                            
 							                             <div class="form-group">
 								                                <label>Header for Rating Page</label>
-								                                  <input type="text" class="form-control formStyle">
+								                                  <input type="text" class="form-control formStyle" maxlength="60" id="rateHeader" value="{{ratingHeader}}">
 										                 </div>
 										                 
 										                  <div class="form-group">
 								                                <label>Minor Heading for Rating Page</label>
-								                                  <input type="text" class="form-control formStyle">
+								                                  <input type="text" class="form-control formStyle" maxlength="60" id="rateSubHeader" value="{{ratingSubHeader}}">
 										                 </div> 
 										                 
 						                    </section>
 						                            
 						                    <section class="expFormRightSide">
 						                               
-				                               <label id="labelRating">Rating (1 is the Lowest - 10 is the Highest)</label>							                 		
+				                               <label id="labelRating">Rating (3 is the Lowest - 10 is the Highest)</label>							                 		
 									                    <table id="ratingTable" class="rating-list">
 															    <thead class="tableHeader">
 															        <tr>
@@ -357,17 +329,33 @@ $(document).ready(function() {
 															        </tr>
 															    </thead>
 															    <tbody id="ratingTableBody">
-															        <!-- <tr>
-															            <td>
-															                <input type="text" name="name"  class="tableStyle" />
+															        <tr>
+															            <td class="tableNumbers">
+															                1
 															            </td>
 															            <td>
-															                <input type="text" name="price1"  class="tableStyle" />
+															                <input class="ratingTableStyle" type="text" name="rate0" maxlength="45" value="{{rate1}}"/>
 															            </td>
-															            <td><a class="deleteRow"></a>
-															
+															            
+															        </tr>
+															         <tr>
+															            <td class="tableNumbers">
+															                2
 															            </td>
-															        </tr> -->
+															            <td>
+															                <input class="ratingTableStyle" type="text" name="rate1" maxlength="45" value="{{rate2}}"/>
+															            </td>
+															           
+															        </tr>
+															         <tr>
+															            <td class="tableNumbers">
+															                3
+															            </td>
+															            <td>
+															                <input class="ratingTableStyle" type="text" name="rate2" maxlength="45" value="{{rate3}}"/>
+															            </td>
+															            
+															        </tr>
 															    </tbody>
 															    <tfoot>
 															        <tr>
@@ -380,17 +368,21 @@ $(document).ready(function() {
 									      </section>
 									      
 						           <section class="buttonsSection">
-					              	    <input type="submit" class="btn btn-default submitStyle" value="Submit">
+					              	    <input type="submit" class="btn btn-default submitStyle" value="Submit" onclick="submitAll()"/>
 					              	    <!-- <article class="btn btn-default nextStyle" onclick="generalPressed()">Back</article>    -->
 					              	    <a href="/Experiments"><article class="btn btn-default cancelStyle">Cancel</article> </a>   
 					              </section>
 					              
 					         </section> 
+{{/items}}  
+
+
+
+ 
 			                 
 			                  <section id="iterationSection">
 			                  	
 			                  	<section id="iterationTable">
-			                  		
 			                  		<div class="col-lg-6 ">
 				                        <label>Iterations Table</label>
 				                        <div class="table-responsive iterationBorderRadius">
@@ -414,7 +406,7 @@ $(document).ready(function() {
                                                         <td>{{comment}}</td>
                                                         <td>{{link}}</td>
                                                         <td><a href="/excel?iterationId={{iteration_id}}&tries={{../tries}}">Export</a><br></td>
-                                                        <td>Edit</td>
+                                                        <td><a href="/iteration:{{iteration_id}}">Edit</a></td>
                                                         </tr>
                                                                                                     
                                                         {{/each}}
@@ -425,52 +417,77 @@ $(document).ready(function() {
 				                            </table>
 				                        </div>
 				                    </div>
-			                  		
-			                  		
+			                  	
+				                    <section class="newIterationSection">
+		                                 <article class="btn btn-default newIterationStyle" type="text" onclick="newIterationPressed()"  name="newIteration"> New Iteration </article>
+		                                <input type="hidden" id="share_link" name="share_link"/>
+		                                <input type="hidden" id="share_token" name="share_token"/>
+		                            </section>
+
 			                  	</section>
+
 			                  	
-			                  	
-			                  
-			                  	<!-- <label id="labelUsers">Users Table</label><br><br>
-			                 		<section id="tablePlace">
-					                    <table id="myTable" class="order-list">
-											    <thead class="tableHeader">
-											        <tr>
-											            <td class="tableHeaderLeft">Name</td>
-											            <td class="tableHeaderRight">Price</td>
-											        </tr>
-											    </thead>
-											    <tbody id="tableBody">
-											        <tr>
-											            <td>
-											                <input type="text" name="name"  class="tableStyle" />
-											            </td>
-											            <td>
-											                <input type="text" name="price1"  class="tableStyle" />
-											            </td>
-											            <td><a class="deleteRow"></a>
-											
-											            </td>
-											        </tr>
-											    </tbody>
-											    <tfoot>
-											        <tr>
-											            <td colspan="2" style="text-align: left;">
-											                <input type="button" id="addrow" value="Add Row" class="addNew"/>
-											            </td>
-											        </tr>
-											    </tfoot>
-										</table>
-					                 	<section id="tableDisabler"> </section> 
-					             	 </section>   -->
-			                  	
-			                  </section>
+
+			                  	<section id="viewIteration">
+							                 	<section class="expFormLeftSide">
+										                 <div class="form-group">
+								                                <label>Date of Last "Run":&nbsp {{date}}</label>
+										                 </div>
+
+										                 <div class="form-group">
+								                                <label>Subjects:&nbsp {{subjects}}</label>
+										                 </div>
+
+										                 <div class="form-group">
+								                                <label>Iteration Link:&nbsp</label>
+								                                <article id="newIterationLink" class="iterationLinkStyle">{{link}}</article>
+										                 </div>
+										                 
+										                 <div class="form-group">
+								                                <label>Comments </label>
+								                                <textarea class="form-control textStyle formStyle" name="description" rows="2" id="iterationComment">{{comment}}</textarea>
+								                         </div>
+														<div class="clear"></div>
+						                        </section>
+						                            
+						                        <section class="expFormRightSide">
+						                       	
+															<div class="form-group">			
+																	<label>&nbsp &nbsp&nbsp Private</label> <br>
+															       <section class="onoffswitch">
+																		    <input type="checkbox" name="PrivateOnOffSwitch" class="onoffswitch-checkbox" id="PrivateOnOffSwitch" onclick="privateSwitch()">
+																		    <label class="onoffswitch-label" for="PrivateOnOffSwitch">
+																		        <span class="onoffswitch-inner"></span>
+																		        <span class="onoffswitch-switch"></span>
+																		    </label>
+																	</section>
+															</div>
+
+															<div class="form-group input-group">
+												    <input type="text" name="password" class="passwordStyle" id="password"/>
+												    <span class="input-group-btn" style="width: 100px; ">
+												        <article class="btn btn-default genPassStyle" onclick="randomString()">Generate</article>
+												    </span>
+												</div>
+															
+															
+		
+								          		</section>
+
+						                 <section class="buttonsSection">
+						                 	<input type="submit" class="btn btn-default submitStyle" onclick="submitIteration()" value="Submit">
+						                  	<article class="btn btn-default cancelStyle" onclick="iterationSubmitPressed()">Cancel</article>
+                                            
+                                         </section>
+						            
+						                 
+		 		 			</section>
+						 </section>
 			                 
 			                 
 				                    
 	                 </section>
 
-                </form>
 
             </div>
             <!-- /.container-fluid -->
@@ -480,4 +497,107 @@ $(document).ready(function() {
 
     </div>
     <!-- /#wrapper -->
+
+    <script type="text/javascript">
+    	function submitAll(){
+          	console.log("Submitting");
+         
+         	var rates = document.getElementsByClassName('ratingTableStyle');
+          	var ratesArray = [];
+          	for(var i=0;i<rates.length;i++){
+          		ratesArray.push(rates[i].value);
+          	}
+
+	            
+	        var data = {};
+	        data.ExpName = document.getElementById('ExpName').value;
+	        data.ExpDesc = document.getElementById('ExpDesc').value;
+
+	        data.MaxTries = document.getElementById('tries').value;
+	        data.Wallet = document.getElementById('wallet').value;
+	        data.GizmoCode = document.getElementById('GizmoCode').value;
+
+	        var e = document.getElementById('Categories');
+			var Category = e.options[e.selectedIndex].value;
+	        data.Category = Category;
+
+	        data.showPrices = JSON.stringify(document.getElementById("PriceOnOffSwitch").checked);
+	        data.openNegotiation = JSON.stringify(document.getElementById("BidOnOffSwitch").checked);
+	        data.MinPrice = JSON.stringify(document.getElementById("MinPriceOnOffSwitch").checked);
+
+	                 
+	        data.intro = document.getElementById('intro').value;
+	        data.conclusion = document.getElementById('conclusion').value;
+	        data.msgPriceOn = document.getElementById('msgPriceOn').value;
+	        data.msgNegoOn = document.getElementById('msgNegoOn').value;
+	        data.msgMinPriceOn = document.getElementById('msgMinPriceOn').value;
+	        data.msgMinPriceOff = document.getElementById('msgMinPriceOff').value;
+	        data.msgAboveProducts = document.getElementById('msgAboveProducts').value;
+	        data.msgPriceLow = document.getElementById('msgPriceLow').value;
+	        data.rateHeader = document.getElementById('rateHeader').value;
+	        data.rateSubHeader = document.getElementById('rateSubHeader').value;
+	        data.ratesArray = JSON.stringify(ratesArray);
+
+	        console.log(data);
+{{#items}}
+	        var request = $.ajax({
+		        url: "/SubmitModifiedExperiment:{{experiment_id}}",
+		        async: false,
+		        type: "POST",
+		        data: data,
+		        contentType: "application/x-www-form-urlencoded"
+	        });
+{{/items}}  
+
+	        request.success(function(result) {
+	          	window.location.href = '/Experiments';
+	        });
+
+	        request.fail(function(jqXHR, textStatus) {
+	            alert("Request failed: " + textStatus);
+	        });
+        }
+
+    	function submitIteration(){
+          	console.log("Submitting");
+         {{#items}}
+         	  token = document.getElementById("share_token").value;
+	        var data = {};
+	        data.iteration_id = token;
+	        data.experiment_id = {{experiment_id}}; 
+	        data.link = document.getElementById('newIterationLink').innerText;
+	        data.comment = document.getElementById('iterationComment').value;
+	        data.privateIteration = JSON.stringify(document.getElementById("PrivateOnOffSwitch").checked);
+            if (data.privateIteration == "true")
+            {
+            	data.iterationPassword = document.getElementById('password').value;
+            } 
+            data.subjects = 0;
+
+
+	        console.log(data);
+	        
+	        var request = $.ajax({
+		        url: "/SubmitNewIteration",
+		        async: false,
+		        type: "POST",
+		        data: data,
+		        contentType: "application/x-www-form-urlencoded"
+	        });
+ 
+
+	        request.success(function(result) {
+	          	window.location.href = '/ModifyExperiment:{{experiment_id}}';
+	        });
+	        
+	        request.fail(function(jqXHR, textStatus) {
+	            alert("Request failed: " + textStatus);
+	        });
+	        {{/items}}
+        }
+    </script>
+
+
+
+
 

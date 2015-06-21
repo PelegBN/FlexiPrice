@@ -17,16 +17,10 @@
             <ul class="nav navbar-right top-nav">
                 
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Natalie Menahem <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{user.email}} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
                         <li>
@@ -64,10 +58,10 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="contact.html"><i class="fa fa-fw fa-send"></i> Contact</a>
+                        <a href="/contact"><i class="fa fa-fw fa-send"></i> Contact</a>
                     </li>
                      <li>
-                        <a href="about.html"><i class="fa fa-fw fa-info"></i> About</a>
+                        <a href="Help.pdf" target="_blank"><i class="fa fa-fw fa-info"></i> Help</a>
                     </li>
                      <li>
                         <a href="http://www.surveygizmo.com" target="_blank"><i class="fa fa-fw fa-link"></i> SurveyGizmo</a>
@@ -118,8 +112,8 @@
                                         <tr>
                                             <td>{{category_name}}</td>
                                             <td>{{products_number}}</td>
-                                            <td><a href="/ShowCategory:{{category_id}}" id="{{category_id}}">Edit</a>
-                                                <a href="/DeleteCategory:{{category_id}}" id="{{category_id}}">Del</a>
+                                            <td><a href="/ShowCategory:{{category_id}}" id="{{category_id}}">Edit</a> / 
+                                                <a href="/DeleteCategory:{{category_id}}" id="{{category_id}}" class="del">Del</a>
                                             </td>
                                         </tr>
                                         {{/each}} 

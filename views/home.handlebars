@@ -22,12 +22,7 @@
                         <li>
                             <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
                         </li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
-                        </li>
+                        
                         <li class="divider"></li>
                         <li>
                             <a href="/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
@@ -38,7 +33,7 @@
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
-                    <li class="active">
+                    <li class="home-nav myActive">
                         <a href="/"><i class="fa fa-fw fa-home"></i> Home Page</a>
                     </li>
                      <li>
@@ -64,10 +59,10 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="contact.html"><i class="fa fa-fw fa-send"></i> Contact</a>
+                        <a href="/contact"><i class="fa fa-fw fa-send"></i> Contact</a>
                     </li>
                      <li>
-                        <a href="about.html"><i class="fa fa-fw fa-info"></i> About</a>
+                        <a href="Help.pdf" target="_blank"><i class="fa fa-fw fa-info"></i> Help</a>
                     </li>
                      <li>
                         <a href="http://www.surveygizmo.com" target="_blank"><i class="fa fa-fw fa-link"></i> SurveyGizmo</a>
@@ -105,48 +100,48 @@
 
                 <div class="row">
                     <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="experiments"></i>
+                        <a href="/Experiments">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <i class="experiments"></i>
+                                        </div>
+                                        <div class="col-xs-9 text-right">
+                                            <div class="huge">{{expNum}}</div>
+                                            <div>Experiments</div>
+                                        </div>
                                     </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div class="huge">{{expNum}}</div>
-                                        <div>Experiments</div>
-                                    </div>
+                                </div>
+                                <div class="panel-footer panel-btm-clr">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
                                 </div>
                             </div>
-                            <a href="/Experiments">
-                                <div class="panel-footer panel-btm-clr">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </a>
-                        </div>
+                         </a>
                     </div>
                     <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-green">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="categories"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div class="huge">{{catNum}}</div>
-                                        <div>Categories</div>
+                        <a href="/Categories">
+                            <div class="panel panel-green">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <i class="categories"></i>
+                                        </div>
+                                        <div class="col-xs-9 text-right">
+                                            <div class="huge">{{catNum}}</div>
+                                            <div>Categories</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <a href="/Categories">
                                 <div class="panel-footer panel-btm-clr">
                                     <span class="pull-left">View Details</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                     <div class="clearfix"></div>
-                                </div>
-                            </a>
-                        </div>
+                                </div> 
+                            </div>
+                        </a>
                     </div>
                     
                     
@@ -177,7 +172,7 @@
                                             <td>{{experiment_name}}</td>
                                             <td>{{date}}</td>
                                             <td>{{subjects}}</td>
-                                            <td>Edit</td>
+                                            <td><a href="/iteration:{{iteration_id}}">Edit</a></td>
                                         </tr>
                                        {{/each}}
                                     <tfoot>
