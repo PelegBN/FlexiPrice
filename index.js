@@ -31,7 +31,7 @@ var S3_BUCKET = process.env.S3_BUCKET;
  var funct = require('./functions.js'); //funct file contains our helper functions for our Passport and database work
 
 var app = express();
-app.use('/', express.static('./public'));
+//app.use('/', express.static('./public'));
 app.use('/css',express.static(path.join(__dirname, 'css')));
 app.use('/js',express.static(path.join(__dirname, 'js')));
 app.use('/font-awesome',express.static(path.join(__dirname, 'font-awesome')));
